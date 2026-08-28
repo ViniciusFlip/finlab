@@ -25,12 +25,12 @@ import {
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
   
 const firebaseConfig = {
- apiKey: "AIzaSyAChdrY05XhKerQvfjWl69BeEEqLKTfqC0",
-  authDomain: "finanhouse-bcf72.firebaseapp.com",
-  projectId: "finanhouse-bcf72",
-  storageBucket: "finanhouse-bcf72.firebasestorage.app",
-  messagingSenderId: "765310974104",
-  appId: "1:765310974104:web:949263b7197143c813f8ed"
+ apiKey: "AIzaSyD-xzRjMRVUpey19g745DvPjjpCApqSHVE",
+  authDomain: "myops-d7525.firebaseapp.com",
+  projectId: "myops-d7525",
+  storageBucket: "myops-d7525.firebasestorage.app",
+  messagingSenderId: "247824192162",
+  appId: "1:247824192162:web:77c91ab1e3df855dc7fdfb"
 }; 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app); 
