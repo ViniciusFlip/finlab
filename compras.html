@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Lista de Compras</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+</head>
+
+<body class="bg-gray-100 min-h-screen p-5">
+ <nav class="p-3 space-y-2">
+               <a href="/index.html"
+                  class="sidebar-item flex items-center gap-3 p-3 rounded-xl hover:bg-slate-800 transition">
+               <span><i data-lucide="home"></i></span>
+               <span class="sidebar-text">Inicio</span>
+               </a>
+                <a href="house.html"
+                  class="sidebar-item flex items-center gap-3 p-3 rounded-xl hover:bg-slate-800 transition">
+               <span><i data-lucide="upload"></i></span>
+               <span class="sidebar-text">Entradas/Saidas</span>
+               </a>
+                <a href="debitos.html"
+                  class="sidebar-item flex items-center gap-3 p-3 rounded-xl hover:bg-slate-800 transition">
+               <span><i data-lucide="download"></i></span>
+               <span class="sidebar-text">Contas Pagar</span>
+               </a>
+                <a href="resumo.html"
+                  class="sidebar-item flex items-center gap-3 p-3 rounded-xl hover:bg-slate-800 transition">
+               <span><i data-lucide="home"></i></span>
+               <span class="sidebar-text">Resumo Detalhado</span>
+               </a>
+               <a href="compras.html"
+                  class="sidebar-item flex items-center gap-3 p-3 rounded-xl hover:bg-slate-800 transition">
+               <span><i data-lucide="download"></i></span>
+               <span class="sidebar-text">Lista de Compras</span>
+               </a>
+                
+            </nav>      
+<div class="max-w-md mx-auto bg-white rounded-2xl shadow p-5">
+
+<h1 class="text-2xl font-bold mb-5 text-gray-800">
+🛒 Lista de Compras
+</h1>
+
+
+<div class="flex gap-2">
+
+<input 
+id="itemInput"
+class="flex-1 border rounded-xl p-3 outline-none focus:ring-2 focus:ring-red-500"
+placeholder="Adicionar item">
+
+<button 
+onclick="salvar()"
+class="bg-red-600 text-white px-5 rounded-xl">
++
+</button>
+
+</div>
+
+
+<ul id="lista" class="mt-5 space-y-3"></ul>
+
+
+</div>
+
+
+<script>
+
+let itens = JSON.parse(localStorage.getItem("compras")) || [];
+
+let editando = null;
+
+
+function salvar(){
+
+let input = document.getElementById("itemInput");
+
+let texto = input.value.trim();
+
+
+if(!texto) return;
+
+
+if(editando !== null){
+
+itens[editando].nome = texto;
+editando = null;
+
+}else{
+
+itens.push({
+nome:texto,
+feito:false
+});
+
+}
+
+
+localStorage.setItem("compras", JSON.stringify(itens));
+
+
+input.value="";
+
+render();
+
+}
+
+
+
+function render(){
+
+let lista = document.getElementById("lista");
+
+lista.innerHTML="";
+
+
+itens.forEach((item,index)=>{
+
+
+lista.innerHTML += `
+
+<li class="bg-gray-50 p-3 rounded-xl flex items-center justify-between">
+
+
+<div 
+onclick="toggle(${index})"
+class="cursor-pointer flex-1 
+${item.feito ? 'line-through text-gray-400':''}">
+
+${item.nome}
+
+</div>
+
+
+<div class="flex gap-2">
+
+
+<button 
+onclick="editar(${index})"
+class="text-blue-600">
+
+✏️
+
+</button>
+
+
+<button 
+onclick="remover(${index})"
+class="text-red-600">
+
+🗑️
+
+</button>
+
+
+</div>
+
+
+</li>
+
+`;
+
+
+});
+
+
+}
+
+
+
+function toggle(i){
+
+itens[i].feito = !itens[i].feito;
+
+salvarStorage();
+
+render();
+
+}
+
+
+
+function editar(i){
+
+document.getElementById("itemInput").value = itens[i].nome;
+
+editando=i;
+
+}
+
+
+
+function remover(i){
+
+itens.splice(i,1);
+
+salvarStorage();
+
+render();
+
+}
+
+
+
+function salvarStorage(){
+
+localStorage.setItem(
+"compras",
+JSON.stringify(itens)
+);
+
+}
+
+
+
+render();
+
+</script>
+
+
+</body>
+</html>

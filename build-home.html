@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+   <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Finanhouse</title>
+      <script src="https://cdn.tailwindcss.com"></script>
+      <script>
+         tailwind.config = {
+             theme: {
+                 extend: {
+         
+                     colors: {
+                         primary: "#dbf412",
+                         secondary: "#F8F8F8",
+                         dark: "#111827"
+                     },
+         
+                     boxShadow: {
+                         card: "0 8px 30px rgba(0,0,0,.06)"
+                     }
+         
+                 }
+             }
+         }
+      </script>
+   </head>
+   <body class="bg-[#e7e7e9]">
+      <div class="flex h-screen overflow-hidden">
+         <!-- SIDEBAR -->
+         <aside
+            class="hidden  w-72 bg-[#f7f7f7] border-r border-gray-200 flex-col">
+            <div class="h-20 flex items-center px-8">
+               <h1 class="text-2xl font-bold">
+                  Finanhouse
+               </h1>
+            </div>
+            <nav class="flex-1 px-5 space-y-2">
+               <a href=""
+                  class="flex items-center gap-3 px-5 py-4 rounded-2xl bg-primary ">
+               Início
+               </a>
+               <a href=""
+                  class="flex items-center gap-3 px-5 py-4 rounded-2xl hover:bg-red-50">
+               Entrada e Saída
+               </a>
+               <a href=""
+                  class="flex items-center gap-3 px-5 py-4 rounded-2xl hover:bg-red-50">
+               Ganhos
+               </a>
+               <a href=""
+                  class="flex items-center gap-3 px-5 py-4 rounded-2xl hover:bg-red-50">
+               Contas
+               </a>
+            </nav>
+         </aside>
+         <!-- CONTEÚDO -->
+         <main class="flex-1 overflow-y-auto">
+            <!-- NAVBAR -->
+            <header
+               class="h-20 bg-[#f7f7f7] border-b border-gray-200 px-8 flex items-center justify-between">
+               <div>
+                  <h2 class="text-1xl font-bold">
+                     Thais Dev
+                  </h2>
+                  <p class="text-1xl text-gray-500">
+                     Painel financeiro.
+                  </p>
+               </div>
+               <div class="flex items-center gap-4">
+                  <input
+                     type="text"
+                     placeholder="Pesquisar..."
+                     class="bg-gray-100 rounded-full px-6 py-3 w-72 outline-none">
+                  <button
+                     class="w-12 h-12 rounded-full bg-gray-100">
+                  🔔
+                  </button>
+                  <img
+                     src="https://i.pravatar.cc/100"
+                     class="w-12 h-12 rounded-full">
+               </div>
+            </header>
+            <!-- DASHBOARD -->
+            <section class="p-8">
+               <!-- CARDS -->
+               <div
+                  class="hidden grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+                  <div
+                     class="bg-primary text-black rounded-3xl p-6 shadow-card">
+                     <p class="text-gray-500">
+                        Carteira
+                     </p>
+                     <h3
+                        style="
+                        color: #092345;
+                        "
+                        class="text-4xl font-bold mt-4">
+                        R$ 38.240
+                     </h3>
+                     <span
+                        class="text-green-600 mt-4 block">
+                     ▲ +12%
+                     </span>
+                  </div>
+                  <div
+                     class="bg-white text-black rounded-3xl p-6 shadow-card">
+                     <p>
+                        Receitas
+                     </p>
+                     <h3
+                        class="text-4xl font-bold mt-4">
+                        R$ 12.800
+                     </h3>
+                     <span>
+                     Este mês
+                     </span>
+                  </div>
+                  <div
+                     class="bg-white text-black rounded-3xl p-6 shadow-card">
+                     <p class="text-gray-500">
+                        Despesas
+                     </p>
+                     <h3
+                        class="text-4xl font-bold mt-4">
+                        R$ 7.240
+                     </h3>
+                     <span
+                        class="text-red-600">
+                     ▼ -6%
+                     </span>
+                  </div>
+                  <div
+                     class="bg-white text-black rounded-3xl p-6 shadow-card">
+                     <p class="text-gray-500">
+                        Total Poupança
+                     </p>
+                     <h3
+                        class="text-4xl font-bold mt-4">
+                        R$ 92.000
+                     </h3>
+                     <span
+                        class="text-green-600">
+                     ▲ +18%
+                     </span>
+                  </div>
+               </div>
+               <!-- Entradas -->
+               <div
+                  class="  grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+
+                  <!-- Entradas -->
+                  <div
+                     class="hidden bg-primary text-black rounded-3xl p-6 shadow-card">
+                     <p >
+                        Entradas
+                     </p>
+                     <h3
+                        class="text-4xl font-bold mt-4">
+                        R$ 38.240
+                     </h3>
+                     <span class="text-gray-500">
+                     Hoje
+                     </span>
+                     <span
+                        class="text-green-600 mt-4 block">
+                     ▲ +12%
+                     </span>
+                  </div>
+                  <!-- Dados Hoje -->
+                  <div
+                     class="hidden bg-[#f7f7f7] text-black rounded-3xl p-6 shadow-card">
+                     <p  >
+                        Saídas
+                     </p>
+                     <h3
+                        class="text-4xl font-bold mt-4">
+                        R$ 540
+                     </h3>
+                     <span class="text-gray-500">
+                     Hoje
+                     </span>
+                     <span
+                        class="text-red-600 mt-4 block">
+                     ▲ +12%
+                     </span>
+                  </div>
+                  <div
+                     class="bg-[#f7f7f7] text-black rounded-3xl p-6 shadow-card">
+                     <p  >
+                        Total Geral
+                     </p>
+                     <div class="">
+                        <h3
+                           class="text-green-600 text-4xl font-bold mt-4">
+                           R$ 20.000
+                        </h3>
+                        <span class="text-gray-500">
+                        Entradas
+                        </span>
+                     </div>
+                     <div class="">
+                        <h3
+                           class="text-red-600 text-4xl font-bold mt-4">
+                           R$ 105,83
+                        </h3>
+                        <span class="text-gray-500">
+                        Saídas
+                        </span>
+                     </div>
+                  </div>
+                  <div
+                     class="bg-[#f7f7f7] text-black rounded-3xl p-6 shadow-card">
+                     <p  >
+                        Hoje
+                     </p>
+                     <div class="">
+                        <h3
+                           class="text-green-600 text-4xl font-bold mt-4">
+                           R$ 2.589
+                        </h3>
+                        <span class="text-gray-500">
+                        Entradas
+                        </span>
+                     </div>
+                     <div class="">
+                        <h3
+                           class="text-red-600 text-4xl font-bold mt-4">
+                           R$ 438,09
+                        </h3>
+                        <span class="text-gray-500">
+                        Saídas
+                        </span>
+                     </div>
+                  </div>
+                  <div
+                     class="bg-[#f7f7f7] text-black rounded-3xl p-6 shadow-card">
+                     <p  >
+                        7 dias
+                     </p>
+                     <div class="">
+                        <h3
+                           class="text-green-600 text-4xl font-bold mt-4">
+                           R$ 2.589
+                        </h3>
+                        <span class="text-gray-500">
+                        Entradas
+                        </span>
+                     </div>
+                     <div class="">
+                        <h3
+                           class="text-red-600 text-4xl font-bold mt-4">
+                           R$ 438,09
+                        </h3>
+                        <span class="text-gray-500">
+                        Saídas
+                        </span>
+                     </div>
+                  </div>
+                  <div
+                     class="bg-[#f7f7f7] text-black rounded-3xl p-6 shadow-card">
+                     <p  >
+                        30 Dias
+                     </p>
+                     <div class="">
+                        <h3
+                           class="text-green-600 text-4xl font-bold mt-4">
+                           R$ 2.589
+                        </h3>
+                        <span class="text-gray-500">
+                        Entradas
+                        </span>
+                     </div>
+                     <div class="">
+                        <h3
+                           class="text-red-600 text-4xl font-bold mt-4">
+                           R$ 438,09
+                        </h3>
+                        <span class="text-gray-500">
+                        Saídas
+                        </span>
+                     </div>
+                  </div>
+                 
+               </div>
+               <!-- GRÁFICOS -->
+               <div class="hidden mt-12 bg-white rounded-3xl shadow-sm border border-gray-200 overflow-hidden">
+                  <div class="bg-white rounded-3xl  p-6">
+                     <div class="mb-5">
+                        <h3 class="text-xl font-bold text-gray-900">
+                           Novo lançamento
+                        </h3>
+                        <p class="text-sm text-gray-500 mt-1">
+                           Digite um comando para registrar uma movimentação financeira.
+                        </p>
+                     </div>
+                     <div class="space-y-4">
+                        <input
+                           id="command"
+                           type="text"
+                           placeholder="Ex: entrada 23,50 categoria alimentação"
+                           class="w-full h-14 px-5 rounded-2xl bg-gray-50 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 transition placeholder:text-gray-400 text-gray-800">
+                        <div class="flex flex-col sm:flex-row gap-3">
+                           <button
+                              id="btnAdicionar"
+                              onclick="adicionar()"
+                              class="flex-1 h-12 rounded-2xl bg-primary text-black  hover:bg-red-700  font-semibold transition-all duration-300 shadow-lg shadow-red-600/20">
+                           Adicionar lançamento
+                           </button>
+                           <button
+                              id="btnCancelar"
+                              onclick="cancelarEdicao()"
+                              class="hidden h-12 px-6 rounded-2xl bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium transition-all">
+                           Cancelar
+                           </button>
+                        </div>
+                     </div>
+                  </div>
+                  <!-- Cabeçalho -->
+                  <div class="flex items-center justify-between px-6 py-5 border-b border-gray-100">
+                     <div>
+                        <p class="text-sm text-gray-500">
+                           Histórico de entradas e saídas
+                        </p>
+                     </div>
+                  </div>
+                  <!-- Tabela -->
+                  <div class="overflow-x-auto">
+                     <table class="w-full">
+                        <thead class="bg-primary text-black ">
+                           <tr>
+                              <th class="px-6 py-4 text-left font-semibold rounded-tl-2xl">
+                                 Data
+                              </th>
+                              <th class="px-6 py-4 text-left font-semibold">
+                                 Tipo
+                              </th>
+                              <th class="px-6 py-4 text-left font-semibold">
+                                 Categoria
+                              </th>
+                              <th class="px-6 py-4 text-left font-semibold">
+                                 Valor
+                              </th>
+                              <th class="px-6 py-4 text-left font-semibold">
+                                 Usuário
+                              </th>
+                              <th class="px-6 py-4 text-left font-semibold">
+                                 Descrição
+                              </th>
+                              <th class="px-6 py-4 text-center font-semibold rounded-tr-2xl">
+                                 Ações
+                              </th>
+                           </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-100">
+                           <!-- Entrada -->
+                           <tr class="hover:bg-red-50 transition">
+                              <td class="px-6 py-5 text-gray-600 whitespace-nowrap">
+                                 18/06/2026
+                              </td>
+                              <td class="px-6 py-5">
+                                 <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-green-100 text-green-700 font-semibold text-sm">
+                                 🟢 Entrada
+                                 </span>
+                              </td>
+                              <td class="px-6 py-5">
+                                 <span class="inline-flex px-3 py-1 rounded-full bg-blue-100 text-blue-700 text-sm">
+                                 Salário
+                                 </span>
+                              </td>
+                              <td class="px-6 py-5 font-bold text-green-600 whitespace-nowrap">
+                                 + R$ 2.500,00
+                              </td>
+                              <td class="px-6 py-5">
+                                 Vinicius
+                              </td>
+                              <td class="px-6 py-5 text-gray-500">
+                                 Pagamento mensal
+                              </td>
+                              <td class="px-6 py-5">
+                                 <div class="flex justify-center gap-2">
+                                    <button class="w-10 h-10 rounded-xl bg-blue-50 hover:bg-blue-100 transition">
+                                    ✏️
+                                    </button>
+                                    <button class="w-10 h-10 rounded-xl bg-red-50 hover:bg-red-100 transition">
+                                    🗑️
+                                    </button>
+                                 </div>
+                              </td>
+                           </tr>
+                           <!-- Saída -->
+                           <tr class="hover:bg-red-50 transition">
+                              <td class="px-6 py-5 text-gray-600 whitespace-nowrap">
+                                 17/06/2026
+                              </td>
+                              <td class="px-6 py-5">
+                                 <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-100 text-red-700 font-semibold text-sm">
+                                 🔴 Saída
+                                 </span>
+                              </td>
+                              <td class="px-6 py-5">
+                                 <span class="inline-flex px-3 py-1 rounded-full bg-yellow-100 text-yellow-700 text-sm">
+                                 Alimentação
+                                 </span>
+                              </td>
+                              <td class="px-6 py-5 font-bold text-red-600 whitespace-nowrap">
+                                 - R$ 185,30
+                              </td>
+                              <td class="px-6 py-5">
+                                 Vinicius
+                              </td>
+                              <td class="px-6 py-5 text-gray-500">
+                                 Compras no mercado
+                              </td>
+                              <td class="px-6 py-5">
+                                 <div class="flex justify-center gap-2">
+                                    <button class="w-10 h-10 rounded-xl bg-blue-50 hover:bg-blue-100 transition">
+                                    ✏️
+                                    </button>
+                                    <button class="w-10 h-10 rounded-xl bg-red-50 hover:bg-red-100 transition">
+                                    🗑️
+                                    </button>
+                                 </div>
+                              </td>
+                           </tr>
+                        </tbody>
+                     </table>
+                  </div>
+               </div>
+            </section>
+
+            <section class="p-8">
+               <!-- CARDS -->
+               <div
+                  class="hidden grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+                  <div
+                     class="bg-primary text-black rounded-3xl p-6 shadow-card">
+                     <p class="text-gray-500">
+                        Carteira
+                     </p>
+                     <h3
+                        style="
+                        color: #092345;
+                        "
+                        class="text-4xl font-bold mt-4">
+                        R$ 38.240
+                     </h3>
+                     <span
+                        class="text-green-600 mt-4 block">
+                     ▲ +12%
+                     </span>
+                  </div>
+                  <div
+                     class="bg-white text-black rounded-3xl p-6 shadow-card">
+                     <p>
+                        Receitas
+                     </p>
+                     <h3
+                        class="text-4xl font-bold mt-4">
+                        R$ 12.800
+                     </h3>
+                     <span>
+                     Este mês
+                     </span>
+                  </div>
+                  <div
+                     class="bg-white text-black rounded-3xl p-6 shadow-card">
+                     <p class="text-gray-500">
+                        Despesas
+                     </p>
+                     <h3
+                        class="text-4xl font-bold mt-4">
+                        R$ 7.240
+                     </h3>
+                     <span
+                        class="text-red-600">
+                     ▼ -6%
+                     </span>
+                  </div>
+                  <div
+                     class="bg-white text-black rounded-3xl p-6 shadow-card">
+                     <p class="text-gray-500">
+                        Total Poupança
+                     </p>
+                     <h3
+                        class="text-4xl font-bold mt-4">
+                        R$ 92.000
+                     </h3>
+                     <span
+                        class="text-green-600">
+                     ▲ +18%
+                     </span>
+                  </div>
+               </div>
+               <!-- Entradas -->
+               <div
+                  class="  grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+
+                  <!-- Entradas -->
+                  <div
+                     class="hidden bg-primary text-black rounded-3xl p-6 shadow-card">
+                     <p >
+                        Entradas
+                     </p>
+                     <h3
+                        class="text-4xl font-bold mt-4">
+                        R$ 38.240
+                     </h3>
+                     <span class="text-gray-500">
+                     Hoje
+                     </span>
+                     <span
+                        class="text-green-600 mt-4 block">
+                     ▲ +12%
+                     </span>
+                  </div>
+                  <!-- Dados Hoje -->
+                  <div
+                     class="hidden bg-[#f7f7f7] text-black rounded-3xl p-6 shadow-card">
+                     <p  >
+                        Saídas
+                     </p>
+                     <h3
+                        class="text-4xl font-bold mt-4">
+                        R$ 540
+                     </h3>
+                     <span class="text-gray-500">
+                     Hoje
+                     </span>
+                     <span
+                        class="text-red-600 mt-4 block">
+                     ▲ +12%
+                     </span>
+                  </div>
+                  <div
+                     class="bg-[#f7f7f7] text-black rounded-3xl p-6 shadow-card">
+                     <p  >
+                        Total Thais
+                     </p>
+                     <div class="">
+                        <h3
+                           class="text-green-600 text-4xl font-bold mt-4">
+                           R$ 20.000
+                        </h3>
+                        <span class="text-gray-500">
+                        Entradas
+                        </span>
+                     </div>
+                     <div class="">
+                        <h3
+                           class="text-red-600 text-4xl font-bold mt-4">
+                           R$ 105,83
+                        </h3>
+                        <span class="text-gray-500">
+                        Saídas
+                        </span>
+                     </div>
+                  </div>
+                  <div
+                     class="bg-[#f7f7f7] text-black rounded-3xl p-6 shadow-card">
+                     <p  >
+                        Total Marion
+                     </p>
+                     <div class="">
+                        <h3
+                           class="text-green-600 text-4xl font-bold mt-4">
+                           R$ 2.589
+                        </h3>
+                        <span class="text-gray-500">
+                        Entradas
+                        </span>
+                     </div>
+                     <div class="">
+                        <h3
+                           class="text-red-600 text-4xl font-bold mt-4">
+                           R$ 438,09
+                        </h3>
+                        <span class="text-gray-500">
+                        Saídas
+                        </span>
+                     </div>
+                  </div>
+                  <div
+                     class="bg-[#f7f7f7] text-black rounded-3xl p-6 shadow-card">
+                     <p  >
+                        Total Vinicius
+                     </p>
+                     <div class="">
+                        <h3
+                           class="text-green-600 text-4xl font-bold mt-4">
+                           R$ 2.589
+                        </h3>
+                        <span class="text-gray-500">
+                        Entradas
+                        </span>
+                     </div>
+                     <div class="">
+                        <h3
+                           class="text-red-600 text-4xl font-bold mt-4">
+                           R$ 438,09
+                        </h3>
+                        <span class="text-gray-500">
+                        Saídas
+                        </span>
+                     </div>
+                  </div>
+                  <div
+                     class="bg-[#f7f7f7] text-black rounded-3xl p-6 shadow-card">
+                     <p  >
+                        Total Poupança 
+                     </p>
+                     <div class="">
+                        <h3
+                           class="text-green-600 text-4xl font-bold mt-4">
+                           R$ 2.589
+                        </h3>
+                        <span class="text-gray-500">
+                        Entradas
+                        </span>
+                     </div>
+                     <div class="">
+                        <h3
+                           class="text-red-600 text-4xl font-bold mt-4">
+                           R$ 438,09
+                        </h3>
+                        <span class="text-gray-500">
+                        Saídas
+                        </span>
+                     </div>
+                  </div>
+                 
+               </div>
+               <!-- Lançamentos -->
+               <div class="hidden mt-12 bg-white rounded-3xl shadow-sm border border-gray-200 overflow-hidden">
+                  <div class="bg-white rounded-3xl  p-6">
+                     <div class="mb-5">
+                        <h3 class="text-xl font-bold text-gray-900">
+                           Novo lançamento
+                        </h3>
+                        <p class="text-sm text-gray-500 mt-1">
+                           Digite um comando para registrar uma movimentação financeira.
+                        </p>
+                     </div>
+                     <div class="space-y-4">
+                        <input
+                           id="command"
+                           type="text"
+                           placeholder="Ex: entrada 23,50 categoria alimentação"
+                           class="w-full h-14 px-5 rounded-2xl bg-gray-50 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 transition placeholder:text-gray-400 text-gray-800">
+                        <div class="flex flex-col sm:flex-row gap-3">
+                           <button
+                              id="btnAdicionar"
+                              onclick="adicionar()"
+                              class="flex-1 h-12 rounded-2xl bg-primary text-black  hover:bg-red-700  font-semibold transition-all duration-300 shadow-lg shadow-red-600/20">
+                           Adicionar lançamento
+                           </button>
+                           <button
+                              id="btnCancelar"
+                              onclick="cancelarEdicao()"
+                              class="hidden h-12 px-6 rounded-2xl bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium transition-all">
+                           Cancelar
+                           </button>
+                        </div>
+                     </div>
+                  </div>
+                  <!-- Cabeçalho -->
+                  <div class="flex items-center justify-between px-6 py-5 border-b border-gray-100">
+                     <div>
+                        <p class="text-sm text-gray-500">
+                           Histórico de entradas e saídas
+                        </p>
+                     </div>
+                  </div>
+                  <!-- Tabela -->
+                  <div class="overflow-x-auto">
+                     <table class="w-full">
+                        <thead class="bg-primary text-black ">
+                           <tr>
+                              <th class="px-6 py-4 text-left font-semibold rounded-tl-2xl">
+                                 Data
+                              </th>
+                              <th class="px-6 py-4 text-left font-semibold">
+                                 Tipo
+                              </th>
+                              <th class="px-6 py-4 text-left font-semibold">
+                                 Categoria
+                              </th>
+                              <th class="px-6 py-4 text-left font-semibold">
+                                 Valor
+                              </th>
+                              <th class="px-6 py-4 text-left font-semibold">
+                                 Usuário
+                              </th>
+                              <th class="px-6 py-4 text-left font-semibold">
+                                 Descrição
+                              </th>
+                              <th class="px-6 py-4 text-center font-semibold rounded-tr-2xl">
+                                 Ações
+                              </th>
+                           </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-100">
+                           <!-- Entrada -->
+                           <tr class="hover:bg-red-50 transition">
+                              <td class="px-6 py-5 text-gray-600 whitespace-nowrap">
+                                 18/06/2026
+                              </td>
+                              <td class="px-6 py-5">
+                                 <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-green-100 text-green-700 font-semibold text-sm">
+                                 🟢 Entrada
+                                 </span>
+                              </td>
+                              <td class="px-6 py-5">
+                                 <span class="inline-flex px-3 py-1 rounded-full bg-blue-100 text-blue-700 text-sm">
+                                 Salário
+                                 </span>
+                              </td>
+                              <td class="px-6 py-5 font-bold text-green-600 whitespace-nowrap">
+                                 + R$ 2.500,00
+                              </td>
+                              <td class="px-6 py-5">
+                                 Vinicius
+                              </td>
+                              <td class="px-6 py-5 text-gray-500">
+                                 Pagamento mensal
+                              </td>
+                              <td class="px-6 py-5">
+                                 <div class="flex justify-center gap-2">
+                                    <button class="w-10 h-10 rounded-xl bg-blue-50 hover:bg-blue-100 transition">
+                                    ✏️
+                                    </button>
+                                    <button class="w-10 h-10 rounded-xl bg-red-50 hover:bg-red-100 transition">
+                                    🗑️
+                                    </button>
+                                 </div>
+                              </td>
+                           </tr>
+                           <!-- Saída -->
+                           <tr class="hover:bg-red-50 transition">
+                              <td class="px-6 py-5 text-gray-600 whitespace-nowrap">
+                                 17/06/2026
+                              </td>
+                              <td class="px-6 py-5">
+                                 <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-100 text-red-700 font-semibold text-sm">
+                                 🔴 Saída
+                                 </span>
+                              </td>
+                              <td class="px-6 py-5">
+                                 <span class="inline-flex px-3 py-1 rounded-full bg-yellow-100 text-yellow-700 text-sm">
+                                 Alimentação
+                                 </span>
+                              </td>
+                              <td class="px-6 py-5 font-bold text-red-600 whitespace-nowrap">
+                                 - R$ 185,30
+                              </td>
+                              <td class="px-6 py-5">
+                                 Vinicius
+                              </td>
+                              <td class="px-6 py-5 text-gray-500">
+                                 Compras no mercado
+                              </td>
+                              <td class="px-6 py-5">
+                                 <div class="flex justify-center gap-2">
+                                    <button class="w-10 h-10 rounded-xl bg-blue-50 hover:bg-blue-100 transition">
+                                    ✏️
+                                    </button>
+                                    <button class="w-10 h-10 rounded-xl bg-red-50 hover:bg-red-100 transition">
+                                    🗑️
+                                    </button>
+                                 </div>
+                              </td>
+                           </tr>
+                        </tbody>
+                     </table>
+                  </div>
+               </div>
+            </section>
+         </main>
+      </div>
+   </body>
+</html>

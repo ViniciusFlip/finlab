@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<title>FinanHouse</title>
+
+<style>
+body{
+    background:#F8FAFC;
+}
+</style>
+
+</head>
+<body id="body" class="bg-[#F8FAFC] text-[#111827]">
+
+<!-- HEADER -->
+<header class="bg-white border-b border-[#E5E7EB] h-16 flex items-center justify-between px-4">
+
+    <button id="openMenu" class="text-2xl">
+        ☰
+    </button>
+
+    <h1 class="font-bold text-lg">
+        FinanHouse
+    </h1>
+
+    <button class="text-xl">
+        🌙
+    </button>
+
+</header>
+
+<!-- MENU -->
+<div id="sidebar"
+class="fixed top-0 left-[-320px] w-80 h-full bg-white shadow-xl transition-all duration-300 z-50">
+
+    <div class="flex justify-between items-center p-4 border-b">
+        <h2 class="font-bold text-lg">
+            FinanHouse
+        </h2>
+
+        <button id="closeMenu">
+            ✕
+        </button>
+    </div>
+
+    <nav class="p-4 space-y-4">
+
+        <a href="#" class="block hover:text-red-600">
+            🏠 Dashboard
+        </a>
+
+        <a href="#" class="block hover:text-red-600">
+            💰 Lançamentos
+        </a>
+
+        <a href="#" class="block text-red-600 font-semibold">
+            📅 Contas Futuras
+        </a>
+
+        <a href="#" class="block hover:text-red-600">
+            📊 Relatórios
+        </a>
+
+    </nav>
+
+    <div class="absolute bottom-0 w-full border-t p-4 text-sm text-gray-500">
+
+        <div>
+            <button id="toggleTheme" class="text-xl">
+    🌙
+</button>
+        </div>
+        <div>☁ Online</div>
+
+        <div class="mt-4">
+            v1.0
+        </div>
+
+    </div>
+
+</div>
+
+<!-- OVERLAY -->
+<div id="overlay"
+class="fixed inset-0 bg-black/30 hidden"></div>
+
+<!-- CONTEÚDO -->
+<main class="p-6">
+
+    <h2 class="text-2xl font-bold mb-6">
+        Contas Futuras
+    </h2>
+<div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+
+    <div class="bg-white border border-[#E5E7EB] rounded-xl p-5">
+        <p class="text-sm text-gray-500">Total Futuro</p>
+        <h3 id="totalFuturo" class="text-2xl font-bold mt-2">
+            R$ 0,00
+        </h3>
+    </div>
+
+    <div class="bg-white border border-[#E5E7EB] rounded-xl p-5">
+        <p class="text-sm text-gray-500">Este Mês</p>
+        <h3 id="esteMes" class="text-2xl font-bold mt-2">
+            R$ 0,00
+        </h3>
+    </div>
+
+    <div class="bg-white border border-[#E5E7EB] rounded-xl p-5">
+        <p class="text-sm text-gray-500">Próximos 7 Dias</p>
+        <h3 id="proximos7Dias" class="text-2xl font-bold mt-2 text-green-600">
+            R$ 0,00
+        </h3>
+    </div>
+
+    <div class="bg-white border border-[#E5E7EB] rounded-xl p-5">
+        <p class="text-sm text-gray-500">Vencidas</p>
+        <h3 id="vencidas" class="text-2xl font-bold mt-2 text-red-600">
+            R$ 0,00
+        </h3>
+    </div>
+
+</div>
+    <!-- COMANDO -->
+    <div class="bg-white rounded-xl border border-[#E5E7EB] p-4 mb-6">
+
+        <div class="grid md:grid-cols-4 gap-3">
+
+            <input
+                id="descricao"
+                type="text"
+                placeholder="Descrição"
+                class="border rounded-lg p-3"
+            >
+
+            <input
+                id="valor"
+                type="number"
+                placeholder="Valor"
+                class="border rounded-lg p-3"
+            >
+
+            <input
+                id="vencimento"
+                type="date"
+                class="border rounded-lg p-3"
+            >
+
+            <button
+                id="salvar"
+                class="bg-red-600 hover:bg-red-700 text-white rounded-lg">
+                Salvar
+            </button>
+
+        </div>
+
+    </div>
+
+    <!-- TABELA -->
+    <div class="bg-white rounded-xl border border-[#E5E7EB] overflow-hidden">
+
+        <table class="w-full">
+
+            <thead class="bg-gray-50">
+
+                <tr>
+                    <th class="text-left p-4">Descrição</th>
+                    <th class="text-left p-4">Valor</th>
+                    <th class="text-left p-4">Vencimento</th>
+                    <th class="text-center p-4">Ações</th>
+                </tr>
+
+            </thead>
+
+            <tbody id="tabela">
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</main>
+
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
+
+import {
+getFirestore,
+collection,
+addDoc,
+getDocs,
+deleteDoc,
+updateDoc,
+doc
+}
+from "https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js";
+
+const firebaseConfig = {
+   apiKey: "AIzaSyAChdrY05XhKerQvfjWl69BeEEqLKTfqC0",
+  authDomain: "finanhouse-bcf72.firebaseapp.com",
+  projectId: "finanhouse-bcf72",
+  storageBucket: "finanhouse-bcf72.firebasestorage.app",
+  messagingSenderId: "765310974104",
+  appId: "1:765310974104:web:949263b7197143c813f8ed"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+const tabela = document.getElementById("tabela");
+
+
+// MENU
+const sidebar = document.getElementById("sidebar");
+const overlay = document.getElementById("overlay");
+
+
+function limparFormulario(){
+
+    descricao.value = "";
+    valor.value = "";
+    vencimento.value = "";
+
+}
+
+openMenu.onclick = () => {
+    sidebar.style.left = "0";
+    overlay.classList.remove("hidden");
+};
+
+closeMenu.onclick = () => {
+    sidebar.style.left = "-320px";
+    overlay.classList.add("hidden");
+};
+
+overlay.onclick = () => {
+    sidebar.style.left = "-320px";
+    overlay.classList.add("hidden");
+};
+
+let editandoId = null;
+window.editar = (
+    id,
+    descricao,
+    valor,
+    vencimento
+)=>{
+
+    document.getElementById("descricao").value =
+        descricao;
+
+    document.getElementById("valor").value =
+        valor;
+
+    document.getElementById("vencimento").value =
+        vencimento;
+
+    editandoId = id;
+
+    document.getElementById("salvar")
+        .innerText = "Atualizar";
+
+    window.scrollTo({
+        top:0,
+        behavior:"smooth"
+    });
+
+};
+// CREATE
+document
+.getElementById("salvar")
+.addEventListener("click", async () => {
+
+    const descricao =
+        document.getElementById("descricao").value;
+
+    const valor =
+        document.getElementById("valor").value;
+
+    const vencimento =
+        document.getElementById("vencimento").value;
+
+    const dados = {
+        descricao,
+        valor: Number(valor),
+        vencimento
+    };
+
+    if(editandoId){
+
+        await updateDoc(
+            doc(db, "contas_futuras", editandoId),
+            dados
+        );
+
+        editandoId = null;
+
+        document.getElementById("salvar")
+        .innerText = "Salvar";
+
+    } else {
+
+        await addDoc(
+            collection(db, "contas_futuras"),
+            dados
+        );
+
+    }
+
+    limparFormulario();
+
+    carregar();
+
+});
+// READ
+ async function carregar() {
+
+    tabela.innerHTML = "";
+
+    const snapshot = await getDocs(
+        collection(db, "contas_futuras")
+    );
+
+    // CARDS
+    let total = 0;
+    let totalMes = 0;
+    let proximos7 = 0;
+    let vencidas = 0;
+
+    const hoje = new Date();
+
+    snapshot.forEach(item => {
+
+        const conta = item.data();
+
+        // SOMATÓRIOS DOS CARDS
+        total += conta.valor;
+
+        const dataConta = new Date(conta.vencimento);
+
+        if (
+            dataConta.getMonth() === hoje.getMonth() &&
+            dataConta.getFullYear() === hoje.getFullYear()
+        ) {
+            totalMes += conta.valor;
+        }
+
+        const diff =
+            (dataConta - hoje) /
+            (1000 * 60 * 60 * 24);
+
+        if (diff >= 0 && diff <= 7) {
+            proximos7 += conta.valor;
+        }
+
+        if (dataConta < hoje) {
+            vencidas += conta.valor;
+        }
+
+        // TABELA
+        tabela.innerHTML += `
+        <tr class="border-t">
+
+            <td class="p-4">
+                ${conta.descricao}
+            </td>
+
+            <td class="p-4">
+                R$ ${conta.valor.toFixed(2)}
+            </td>
+
+            <td class="p-4">
+                ${conta.vencimento}
+            </td>
+
+            <td class="p-4 text-center space-x-2">
+
+                <button
+                    onclick="editar(
+                        '${item.id}',
+                        '${conta.descricao}',
+                        '${conta.valor}',
+                        '${conta.vencimento}'
+                    )"
+                    class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded">
+
+                    Editar
+
+                </button>
+
+                <button
+                    onclick="remover('${item.id}')"
+                    class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded">
+
+                    Excluir
+
+                </button>
+
+            </td>
+
+        </tr>
+        `;
+    });
+
+    // ATUALIZA OS CARDS
+    document.getElementById("totalFuturo").innerText =
+        `R$ ${total.toLocaleString('pt-BR', {
+            minimumFractionDigits: 2
+        })}`;
+
+    document.getElementById("esteMes").innerText =
+        `R$ ${totalMes.toLocaleString('pt-BR', {
+            minimumFractionDigits: 2
+        })}`;
+
+    document.getElementById("proximos7Dias").innerText =
+        `R$ ${proximos7.toLocaleString('pt-BR', {
+            minimumFractionDigits: 2
+        })}`;
+
+    document.getElementById("vencidas").innerText =
+        `R$ ${vencidas.toLocaleString('pt-BR', {
+            minimumFractionDigits: 2
+        })}`;
+}
+
+carregar();
+
+
+// DELETE
+window.remover = async(id)=>{
+
+    await deleteDoc(
+        doc(
+            db,
+            "contas_futuras",
+            id
+        )
+    );
+
+    carregar();
+};
+
+
+const body = document.getElementById("body");
+const btnTheme = document.getElementById("toggleTheme");
+
+function aplicarTema(tema){
+
+    if(tema === "dark"){
+
+        body.className =
+            "bg-[#111827] text-[#F9FAFB]";
+
+        btnTheme.innerHTML = "☀️";
+
+        document.querySelectorAll(".card")
+            .forEach(card => {
+                card.className =
+                    "card bg-[#1F2937] border border-[#374151] rounded-xl p-5";
+            });
+
+    } else {
+
+        body.className =
+            "bg-[#F8FAFC] text-[#111827]";
+
+        btnTheme.innerHTML = "🌙";
+
+        document.querySelectorAll(".card")
+            .forEach(card => {
+                card.className =
+                    "card bg-white border border-[#E5E7EB] rounded-xl p-5";
+            });
+
+    }
+
+    localStorage.setItem("tema", tema);
+
+}
+</script>
+
+</body>
+</html>

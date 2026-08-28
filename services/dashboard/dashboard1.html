@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<script>
+tailwind.config = {
+    darkMode: 'class'
+}
+</script>
+
+<title>Financeiro</title>
+</head>
+
+<style>
+    body {
+    
+        font-family: Inter, system-ui, sans-serif;
+        background: linear-gradient(180deg, #ffffff 0%, #f6f7fb 100%);
+ 
+    }
+
+    .card {
+        background: white;
+        border-radius: 16px;
+        border: 1px solid #eaeaea;
+        box-shadow: 0 6px 18px rgba(0,0,0,0.04);
+        transition: 0.2s ease;
+    }
+
+    .card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(0,0,0,0.06);
+    }
+
+    .title {
+        font-size: 14px;
+        color: #666;
+        font-weight: 500;
+    }
+
+    .value {
+        font-size: 26px;
+        font-weight: 700;
+        letter-spacing: -0.5px;
+    }
+
+    .green {
+        color: #16a34a;
+    }
+
+    .red {
+        color: #e11d48;
+    }
+
+    .section-title {
+        font-size: 18px;
+        font-weight: 700;
+        margin-bottom: 12px;
+        color: #111;
+    }
+</style>
+
+<body>
+<div class="space-y-5">
+
+
+<!-- RESUMO POR PERÍODO -->
+
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+
+    <!-- Hoje -->
+    <div class="card p-5">
+
+        <h3 class="section-title">
+            Hoje
+        </h3>
+
+
+        <div class="mt-4">
+
+            <p class="text-sm text-gray-500">
+                Entradas
+            </p>
+
+            <p id="hojeEntradas"
+            class="text-2xl font-bold text-green-600">
+                R$ 0,00
+            </p>
+
+
+            <p class="text-sm text-gray-500 mt-3">
+                Saídas
+            </p>
+
+            <p id="hojeSaidas"
+            class="text-2xl font-bold text-red-500">
+                R$ 0,00
+            </p>
+
+        </div>
+
+    </div>
+
+
+
+<div class="card p-5">
+
+    <h3 class="section-title">
+        Últimos 7 dias
+    </h3>
+
+    <div class="mt-4">
+        <p class="title">Entradas</p>
+        <p id="seteEntradas" class="value green">
+            R$ 0,00
+        </p>
+    </div>
+
+    <div class="mt-4">
+        <p class="title">Saídas</p>
+        <p id="seteSaidas" class="value red">
+            R$ 0,00
+        </p>
+    </div>
+
+</div>
+
+
+
+
+
+    <!-- 30 dias -->
+    <div class="hidden bg-white dark:bg-gray-800 rounded-2xl shadow-sm p-5 border border-gray-200 dark:border-gray-700">
+
+
+        <h3 class="font-semibold text-gray-800 dark:text-white">
+            Últimos 30 dias
+        </h3>
+
+
+        <p class="text-sm text-gray-500 mt-4">
+            Entradas
+        </p>
+
+        <p id="trintaEntradas"
+        class="text-2xl font-bold text-green-600">
+            R$ 0,00
+        </p>
+
+
+
+        <p class="text-sm text-gray-500 mt-3">
+            Saídas
+        </p>
+
+
+        <p id="trintaSaidas"
+        class="text-2xl font-bold text-red-500">
+            R$ 0,00
+        </p>
+
+
+    </div>
+
+
+</div>
+
+
+
+
+
+<!-- CATEGORIAS -->
+
+<div class=" hidden grid grid-cols-1 lg:grid-cols-2 gap-5">
+
+
+
+<!-- Entradas categoria -->
+
+<div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm p-5 border">
+
+
+<h3 class="font-semibold dark:text-white">
+Entradas por categoria
+</h3>
+
+
+<div id="listaEntradasCategoria"
+class="mt-4 space-y-3">
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+<!-- Saidas categoria -->
+
+
+<div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm p-5 border">
+
+
+<h3 class="font-semibold dark:text-white">
+Saídas por categoria
+</h3>
+
+
+<div id="listaSaidasCategoria"
+class="mt-4 space-y-3">
+
+
+</div>
+
+
+</div>
+
+
+
+</div>
+
+
+
+
+
+<!-- ANALISES -->
+
+
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+
+
+
+<!-- Top gastos -->
+
+<div class="hidden bg-white dark:bg-gray-800 rounded-2xl shadow-sm p-5 border">
+
+
+<h3 class="font-semibold dark:text-white">
+Top 5 maiores gastos
+</h3>
+
+
+<div id="topGastos"
+class="mt-4 space-y-3">
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+<!-- Comparação -->
+
+<div class=" hidden bg-white dark:bg-gray-800 rounded-2xl shadow-sm p-5 border">
+
+
+<h3 class="font-semibold dark:text-white">
+Comparação mensal
+</h3>
+
+
+<div class="mt-4">
+
+
+<p class="text-gray-500">
+Mês atual
+</p>
+
+
+<p id="mesAtual"
+class="text-2xl font-bold">
+R$ 0,00
+</p>
+
+
+
+<p class="text-gray-500 mt-3">
+Mês anterior
+</p>
+
+
+<p id="mesAnterior"
+class="text-2xl font-bold">
+R$ 0,00
+</p>
+
+
+
+</div>
+
+
+</div>
+
+
+
+</div>
+
+
+
+
+
+<!-- GRÁFICO -->
+
+<div class="hidden bg-white dark:bg-gray-800 rounded-2xl shadow-sm p-5 border">
+
+
+<h3 class="font-semibold dark:text-white mb-4">
+Evolução diária
+</h3>
+
+
+<div id="graficoEvolucao"
+class="h-72">
+
+</div>
+
+
+</div>
+
+
+
+</div>
+<script type="module" src="./dashboard.js"></script>
+<script>
+    window.adicionar  
+    </script>
+</body>
+</html>
