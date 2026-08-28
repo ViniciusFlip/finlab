@@ -2,32 +2,16 @@
 <html lang="pt-BR">
 
 <head>
-
     <meta charset="UTF-8">
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Financeiro</title>
+    <title>FinanHouse</title>
 
-    <link
-        rel="stylesheet"
-        href="assets/css/tema.css"
-    >
-
-    <link
-        rel="stylesheet"
-        href="assets/css/loader.css"
-    >
-
+    <link rel="stylesheet" href="assets/css/tema.css">
+    <link rel="stylesheet" href="assets/css/loader.css">
 
     <style>
-
-        /* RESPONSIVE */
-
-        /* Desktop */
 
         @media (min-width: 1280px) {
 
@@ -66,1156 +50,1062 @@
 </head>
 
 
-<body class="">
+<body>
 
 
-    <!-- LOADER -->
+<!-- LOADER -->
 
-    <div
-        id="app-loader"
-        class="fixed inset-0 z-[9999] flex items-center justify-center bg-[#0f0f0f] duration-300"
+<div
+    id="app-loader"
+    class="fixed inset-0 z-[9999] flex items-center justify-center bg-[#0f0f0f] duration-300"
+>
+
+    <div class="w-full max-w-sm px-8">
+
+        <div class="h-1.5 w-full overflow-hidden rounded-full bg-white/10">
+
+            <div
+                id="loader-progress"
+                class="h-full w-0 rounded-full bg-[#5864be] transition-all duration-200"
+            ></div>
+
+        </div>
+
+        <p class="mt-4 text-center text-sm text-zinc-500 tracking-wide">
+            Carregando...
+        </p>
+
+    </div>
+
+</div>
+
+
+
+<div class="min-h-screen lg:flex">
+
+
+<!-- SIDEBAR -->
+
+<aside
+    id="sidebar"
+    class="
+    collapsed
+    fixed
+    z-50
+    xl:sticky
+    xl:top-0
+    xl:self-start
+    xl:h-screen
+    w-[90%]
+    bg-white
+    border-r
+    border-gray-100
+    -translate-x-full
+    xl:translate-x-0
+    transition-all
+    duration-300
+    "
+>
+
+
+    <div class="sidebar-header flex items-center justify-between p-4 border-b border-gray-100">
+
+
+        <div class="sidebar-logo">
+
+            <span class="font-bold text-lg">
+                FinanHouse
+            </span>
+
+        </div>
+
+
+        <button
+            onclick="toggleSidebar()"
+            class="rounded-lg p-2"
+        >
+            ☰
+        </button>
+
+
+    </div>
+
+
+
+    <nav class="p-3 space-y-2">
+
+
+        <a
+            href="index.html"
+            class="sidebar-item flex items-center gap-3 p-3 rounded-xl hover:bg-gray-100 transition"
+        >
+
+            <i data-lucide="home"></i>
+
+            <span class="sidebar-text">
+                Início
+            </span>
+
+        </a>
+
+
+
+        <a
+            href="index.html"
+            class="sidebar-item flex items-center gap-3 p-3 rounded-xl hover:bg-gray-100 transition"
+        >
+
+            <i data-lucide="arrow-left-right"></i>
+
+            <span class="sidebar-text">
+                Entradas / Saídas
+            </span>
+
+        </a>
+
+
+
+        <a
+            href="resumo.html"
+            class="sidebar-item flex items-center gap-3 p-3 rounded-xl hover:bg-gray-100 transition"
+        >
+
+            <i data-lucide="chart-no-axes-combined"></i>
+
+            <span class="sidebar-text">
+                Resumo Detalhado
+            </span>
+
+        </a>
+
+
+
+        <a
+            href="debitos.html"
+            class="sidebar-item flex items-center gap-3 p-3 rounded-xl hover:bg-gray-100 transition"
+        >
+
+            <i data-lucide="calendar-clock"></i>
+
+            <span class="sidebar-text">
+                Contas a Pagar
+            </span>
+
+        </a>
+
+
+
+        <a
+            href="compras.html"
+            class="sidebar-item flex items-center gap-3 p-3 rounded-xl hover:bg-gray-100 transition"
+        >
+
+            <i data-lucide="shopping-cart"></i>
+
+            <span class="sidebar-text">
+                Lista de Compras
+            </span>
+
+        </a>
+
+
+    </nav>
+
+
+</aside>
+
+
+
+<!-- CONTEÚDO -->
+
+<main class="flex-1 p-4 xl:p-8 max-w-6xl mx-auto w-full">
+
+
+<!-- HEADER -->
+
+<header class="flex items-center justify-between mb-6">
+
+
+    <button
+        onclick="toggleSidebar()"
+        class="xl:hidden p-2"
     >
 
-        <div class="w-full max-w-sm px-8">
+        <i data-lucide="menu"></i>
+
+    </button>
 
 
-            <div class="h-1.5 w-full overflow-hidden rounded-full bg-white/10">
 
-                <div
-                    id="loader-progress"
-                    class="h-full w-0 rounded-full bg-[#5864be] transition-all duration-200"
-                >
-                </div>
+    <div>
 
-            </div>
+        <p class="text-xs text-gray-400 uppercase tracking-widest">
+            FinanHouse
+        </p>
+
+        <h1 class="text-xl font-bold text-gray-800">
+            Meu dinheiro
+        </h1>
+
+    </div>
 
 
-            <p class="mt-4 text-center text-sm text-zinc-500 tracking-wide">
 
-                Carregando...
+    <button
+        id="fullscreenToggle"
+        class="p-2"
+    >
+
+        <i
+            id="iconMaximize"
+            data-lucide="maximize-2"
+        ></i>
+
+
+        <i
+            id="iconMinimize"
+            data-lucide="minimize-2"
+            style="display:none;"
+        ></i>
+
+    </button>
+
+
+</header>
+
+
+
+<!-- USUÁRIO INVISÍVEL PARA O JS -->
+
+<div class="hidden">
+
+    <h4 id="user-name">
+        Não autenticado
+    </h4>
+
+    <p id="user-email"></p>
+
+    <img
+        id="user-photo"
+        src="assets/img/avatar.png"
+        alt=""
+    >
+
+</div>
+
+
+
+<!-- ============================= -->
+<!-- POSSO GASTAR AGORA -->
+<!-- ============================= -->
+
+<section class="mb-5">
+
+
+    <div class="
+    rounded-[32px]
+    p-7
+    bg-blue-600
+    shadow-xl
+    shadow-blue-200
+    ">
+
+
+        <p class="text-blue-100 text-sm font-medium tracking-wide">
+
+            POSSO GASTAR AGORA
+
+        </p>
+
+
+
+        <h2
+            id="possoGastar"
+            class="text-5xl font-bold text-white mt-3"
+        >
+
+            R$ 0,00
+
+        </h2>
+
+
+
+        <p class="text-blue-100 text-sm mt-4">
+
+            Dinheiro livre sem comprometer seu planejamento.
+
+        </p>
+
+
+    </div>
+
+
+</section>
+
+
+
+<!-- ============================= -->
+<!-- PERÍODO -->
+<!-- ============================= -->
+
+<section class="mb-5">
+
+
+    <div class="
+    bg-white
+    rounded-3xl
+    p-5
+    border
+    border-gray-100
+    shadow-sm
+    ">
+
+
+        <p class="text-xs text-gray-400 uppercase tracking-widest mb-3">
+
+            Analisar período
+
+        </p>
+
+
+
+        <select
+            id="periodo"
+            class="
+            w-full
+            h-12
+            px-4
+            rounded-2xl
+            bg-gray-50
+            border
+            border-gray-200
+            text-gray-700
+            outline-none
+            "
+        >
+
+            <option value="todo">
+                Todo período
+            </option>
+
+            <option value="mes">
+                Este mês
+            </option>
+
+            <option value="semana">
+                Esta semana
+            </option>
+
+            <option value="hoje">
+                Hoje
+            </option>
+
+        </select>
+
+
+    </div>
+
+
+</section>
+
+
+
+<!-- ============================= -->
+<!-- SALDO ATUAL -->
+<!-- ============================= -->
+
+<section class="mb-5">
+
+
+    <div class="
+    bg-[#eeeeee]
+    rounded-[28px]
+    p-6
+    border
+    border-white
+    ">
+
+
+        <p class="text-gray-500 text-sm">
+
+            Saldo atual
+
+        </p>
+
+
+
+        <h2
+            id="saldo"
+            class="text-4xl font-bold text-blue-600 mt-2"
+        >
+
+            R$ 0,00
+
+        </h2>
+
+
+
+        <p class="text-xs text-gray-400 mt-2">
+
+            Quanto existe registrado agora.
+
+        </p>
+
+
+    </div>
+
+
+</section>
+
+
+
+<!-- ============================= -->
+<!-- MOVIMENTAÇÃO DO PERÍODO -->
+<!-- ============================= -->
+
+<section class="mb-5">
+
+
+    <div class="grid grid-cols-2 gap-4">
+
+
+        <!-- ENTRADAS -->
+
+        <div class="
+        bg-[#eeeeee]
+        rounded-[24px]
+        p-5
+        ">
+
+
+            <p class="text-gray-500 text-sm">
+
+                Entrou
+
+            </p>
+
+
+
+            <p
+                id="entradas"
+                class="text-xl font-bold text-green-600 mt-2"
+            >
+
+                R$ 0,00
 
             </p>
 
 
         </div>
 
+
+
+        <!-- SAÍDAS -->
+
+        <div class="
+        bg-[#eeeeee]
+        rounded-[24px]
+        p-5
+        ">
+
+
+            <p class="text-gray-500 text-sm">
+
+                Saiu
+
+            </p>
+
+
+
+            <p
+                id="saidas"
+                class="text-xl font-bold text-red-600 mt-2"
+            >
+
+                R$ 0,00
+
+            </p>
+
+
+        </div>
+
+
+    </div>
+
+
+</section>
+
+
+
+<!-- ============================= -->
+<!-- MEU DINHEIRO ESTÁ DIVIDIDO -->
+<!-- ============================= -->
+
+<section class="mb-8">
+
+
+    <div class="flex items-end justify-between mb-4">
+
+
+        <div>
+
+            <p class="text-xs text-gray-400 uppercase tracking-widest">
+
+                Planejamento
+
+            </p>
+
+
+            <h2 class="text-lg font-bold text-gray-800">
+
+                Meu dinheiro agora
+
+            </h2>
+
+
+        </div>
+
+
+        <span class="text-xs text-gray-400">
+
+            Baseado no saldo
+
+        </span>
+
+
     </div>
 
 
 
-    <div class="min-h-screen lg:flex">
+    <div class="grid grid-cols-2 gap-4">
 
 
-        <!-- SIDEBAR -->
+        <!-- NECESSIDADES -->
 
-        <aside
-            id="sidebar"
+        <div class="
+        bg-white
+        rounded-[24px]
+        p-5
+        border
+        border-gray-100
+        shadow-sm
+        ">
+
+
+            <p class="text-gray-500 text-sm">
+
+                Necessidades
+
+            </p>
+
+
+
+            <p
+                id="necessidades"
+                class="text-xl font-bold text-gray-800 mt-2"
+            >
+
+                R$ 0,00
+
+            </p>
+
+
+
+            <p class="text-xs text-gray-400 mt-1">
+
+                50%
+
+            </p>
+
+
+        </div>
+
+
+
+        <!-- RESERVA -->
+
+        <div class="
+        bg-white
+        rounded-[24px]
+        p-5
+        border
+        border-gray-100
+        shadow-sm
+        ">
+
+
+            <p class="text-gray-500 text-sm">
+
+                Reserva
+
+            </p>
+
+
+
+            <p
+                id="reserva"
+                class="text-xl font-bold text-blue-600 mt-2"
+            >
+
+                R$ 0,00
+
+            </p>
+
+
+
+            <p class="text-xs text-gray-400 mt-1">
+
+                20%
+
+            </p>
+
+
+        </div>
+
+
+
+        <!-- OPORTUNIDADES -->
+
+        <div class="
+        bg-white
+        rounded-[24px]
+        p-5
+        border
+        border-gray-100
+        shadow-sm
+        ">
+
+
+            <p class="text-gray-500 text-sm">
+
+                Oportunidades
+
+            </p>
+
+
+
+            <p
+                id="oportunidades"
+                class="text-xl font-bold text-purple-600 mt-2"
+            >
+
+                R$ 0,00
+
+            </p>
+
+
+
+            <p class="text-xs text-gray-400 mt-1">
+
+                20%
+
+            </p>
+
+
+        </div>
+
+
+
+        <!-- LIVRE -->
+
+        <div class="
+        bg-white
+        rounded-[24px]
+        p-5
+        border
+        border-gray-100
+        shadow-sm
+        ">
+
+
+            <p class="text-gray-500 text-sm">
+
+                Livre
+
+            </p>
+
+
+
+            <p
+                id="livre"
+                class="text-xl font-bold text-green-600 mt-2"
+            >
+
+                R$ 0,00
+
+            </p>
+
+
+
+            <p class="text-xs text-gray-400 mt-1">
+
+                10%
+
+            </p>
+
+
+        </div>
+
+
+    </div>
+
+
+</section>
+
+
+
+<!-- ============================= -->
+<!-- NOVO LANÇAMENTO -->
+<!-- ============================= -->
+
+<section class="mb-8">
+
+
+    <div class="
+    bg-white
+    rounded-3xl
+    p-5
+    shadow-sm
+    border
+    border-gray-100
+    ">
+
+
+        <p class="text-xs text-gray-400 uppercase tracking-widest mb-3">
+
+            Novo lançamento
+
+        </p>
+
+
+
+        <input
+            id="command"
+            type="text"
+            placeholder="Ex: entrada 4500 Salário Governo"
             class="
-            collapsed
-            fixed
-            xl:sticky
-            xl:top-0
-            xl:self-start
-            xl:h-screen
-            w-[90%]
-            bg-[#fff]
+            w-full
+            h-14
+            px-5
+            rounded-2xl
+            bg-gray-50
             border
-            border-white/1
-            border-theme
-            border-r
-            -translate-x-full
-            xl:translate-x-0
-            transition-all
-            duration-300
+            border-gray-200
+            text-gray-800
+            placeholder-gray-400
+            outline-none
+            focus:ring-4
+            focus:ring-blue-100
+            focus:border-blue-400
             "
         >
 
 
-            <!-- HEADER SIDEBAR -->
 
-            <div class="sidebar-header flex items-center justify-between p-4 border-b border-theme">
+        <div class="flex gap-3 mt-3">
 
 
-                <span class="sidebar-logo text-lg font-bold">
+            <button
+                id="btnAdicionar"
+                onclick="adicionar()"
+                class="
+                flex-1
+                h-12
+                rounded-2xl
+                bg-blue-600
+                text-white
+                font-semibold
+                "
+            >
 
-                    <div class="hidden flex-1 flex justify-center block">
+                Adicionar
 
-                        <a>
+            </button>
 
-                            <img
-                                src="assets/images/xft-logo.png"
-                                alt="Logo"
-                            >
 
-                        </a>
 
-                    </div>
+            <button
+                id="btnCancelar"
+                onclick="cancelarEdicao()"
+                class="
+                hidden
+                px-6
+                h-12
+                rounded-2xl
+                bg-gray-100
+                text-gray-700
+                font-semibold
+                "
+            >
 
-                </span>
+                Cancelar
 
+            </button>
 
-                <button
-                    onclick="toggleSidebar()"
-                    class="rounded-lg p-2 hover:bg-slate-800 transition"
-                >
 
-                    ☰
+        </div>
 
-                </button>
 
+    </div>
 
-            </div>
 
+</section>
 
 
-            <!-- MENU -->
 
-            <nav class="p-3 space-y-2">
+<!-- ============================= -->
+<!-- LANÇAMENTOS -->
+<!-- ============================= -->
 
+<section>
 
-                <a
-                    href="index.html"
-                    class="sidebar-item flex items-center gap-3 p-3 rounded-xl hover:bg-slate-800 transition"
-                >
 
-                    <span>
+    <div class="flex items-center justify-between mb-4">
 
-                        <i data-lucide="home"></i>
 
-                    </span>
+        <div>
 
-                    <span class="sidebar-text">
+            <p class="text-xs text-gray-400 uppercase tracking-widest">
 
-                        Inicio
+                Histórico
 
-                    </span>
+            </p>
 
-                </a>
 
+            <h2 class="text-lg font-bold text-gray-800">
 
+                Lançamentos
 
-                <a
-                    href="index.html"
-                    class="sidebar-item flex items-center gap-3 p-3 rounded-xl hover:bg-slate-800 transition"
-                >
+            </h2>
 
-                    <span>
 
-                        <i data-lucide="upload"></i>
+        </div>
 
-                    </span>
 
-                    <span class="sidebar-text">
+        <button
+            onclick="testarLogin()"
+            class="text-sm text-blue-600 font-medium"
+        >
 
-                        Entradas/Saidas
+            Entrar
 
-                    </span>
-
-                </a>
-
-
-
-                <a
-                    href="resumo.html"
-                    class="sidebar-item flex items-center gap-3 p-3 rounded-xl hover:bg-slate-800 transition"
-                >
-
-                    <span>
-
-                        <i data-lucide="home"></i>
-
-                    </span>
-
-                    <span class="sidebar-text">
-
-                        Resumo Detalhado
-
-                    </span>
-
-                </a>
-
-
-
-                <a
-                    href="debitos.html"
-                    class="sidebar-item flex items-center gap-3 p-3 rounded-xl hover:bg-slate-800 transition"
-                >
-
-                    <span>
-
-                        <i data-lucide="download"></i>
-
-                    </span>
-
-                    <span class="sidebar-text">
-
-                        Contas Pagar
-
-                    </span>
-
-                </a>
-
-
-
-                <a
-                    href="compras.html"
-                    class="sidebar-item flex items-center gap-3 p-3 rounded-xl hover:bg-slate-800 transition"
-                >
-
-                    <span>
-
-                        <i data-lucide="download"></i>
-
-                    </span>
-
-                    <span class="sidebar-text">
-
-                        Lista de Compras
-
-                    </span>
-
-                </a>
-
-
-            </nav>
-
-
-        </aside>
-
-
-
-        <!-- CONTENT -->
-
-        <main class="flex-1 p-4 xl:p-8">
-
-
-            <!-- HEADER -->
-
-            <header class="border-theme">
-
-
-                <div class="flex items-center justify-between h-16">
-
-
-                    <!-- MENU MOBILE -->
-
-                    <button
-                        onclick="toggleSidebar()"
-                        class="xl:hidden"
-                    >
-
-                        <i data-lucide="menu"></i>
-
-                    </button>
-
-
-
-                    <!-- LOGO -->
-
-                    <div class="flex-1 flex justify-center hidden">
-
-                        <a>
-
-                            <img
-                                src="assets/images/zft-logo.png"
-                                alt="Logo"
-                            >
-
-                        </a>
-
-                    </div>
-
-
-
-                    <!-- BOTÕES -->
-
-                    <div class="flex items-center gap-3 ml-6 mr-6">
-
-
-                        <button
-                            id="fullscreenToggle"
-                            class="fullscreen-btn"
-                        >
-
-                            <i
-                                id="iconMaximize"
-                                data-lucide="maximize-2"
-                            >
-                            </i>
-
-
-                            <i
-                                id="iconMinimize"
-                                data-lucide="minimize-2"
-                                style="display:none;"
-                            >
-                            </i>
-
-                        </button>
-
-
-
-                        <button>
-
-                            <i data-lucide="bell"></i>
-
-                        </button>
-
-
-                    </div>
-
-
-
-                    <!-- USER -->
-
-                    <div class="user-content-box hidden items-center gap-3 mb-3">
-
-
-                        <img
-                            src="assets/capa/avatar.png"
-                            class="w-16 h-16 rounded-2xl border border-white/10 object-cover"
-                        >
-
-
-                        <div>
-
-                            <h4 class="font-medium">
-
-                                Thais
-
-                            </h4>
-
-
-                            <p class="text-xs text-zinc-500">
-
-                            </p>
-
-                        </div>
-
-
-                    </div>
-
-
-                </div>
-
-
-            </header>
-
-
-
-            <!-- DADOS DE USUÁRIO -->
-
-            <div class="hidden">
-
-
-                <h4
-                    id="user-name"
-                    class="font-medium"
-                >
-
-                    Não autenticado
-
-                </h4>
-
-
-                <p
-                    id="user-email"
-                    class="text-xs text-zinc-500"
-                >
-                </p>
-
-
-            </div>
-
-
-
-            <!-- RESULTADOS FINANCEIROS -->
-
-            <div class="space-y-5 mb-6">
-
-
-                <!-- SALDO ATUAL -->
-
-                <div class="bg-[#eeeeee] rounded-[24px] p-6 border border-white/10">
-
-
-                    <p class="text-gray-500 text-sm">
-
-                        Saldo Atual
-
-                    </p>
-
-
-                    <h2
-                        id="saldo"
-                        class="text-3xl font-bold text-blue-600 mt-2"
-                    >
-
-                        R$ 0,00
-
-                    </h2>
-
-
-                    <p class="text-xs text-gray-400 mt-2">
-
-                        Resultado entre entradas e saídas
-
-                    </p>
-
-
-                </div>
-
-
-
-                <!-- QUANTO ENTROU -->
-
-                <div class="bg-[#eeeeee] rounded-[24px] p-6 border border-white/10">
-
-
-                    <p class="text-gray-500 text-sm">
-
-                        Quanto entrou
-
-                    </p>
-
-
-                    <h2
-                        id="entradas"
-                        class="text-3xl font-bold text-green-600 mt-2"
-                    >
-
-                        R$ 0,00
-
-                    </h2>
-
-
-                    <p class="text-xs text-gray-400 mt-2">
-
-                        Base para sua divisão financeira
-
-                    </p>
-
-
-                </div>
-
-
-
-                <!-- DIVISÃO FINANCEIRA -->
-
-                <div class="grid grid-cols-2 gap-4">
-
-
-                    <!-- NECESSIDADES -->
-
-                    <div class="bg-[#eeeeee] rounded-[24px] p-5 border border-white/10">
-
-
-                        <p class="text-gray-500 text-sm">
-
-                            Necessidades
-
-                        </p>
-
-
-                        <p
-                            id="necessidades"
-                            class="text-xl font-bold text-gray-800 mt-2"
-                        >
-
-                            R$ 0,00
-
-                        </p>
-
-
-                        <p class="text-xs text-gray-400 mt-1">
-
-                            50% do que entrou
-
-                        </p>
-
-
-                    </div>
-
-
-
-                    <!-- RESERVA -->
-
-                    <div class="bg-[#eeeeee] rounded-[24px] p-5 border border-white/10">
-
-
-                        <p class="text-gray-500 text-sm">
-
-                            Reserva
-
-                        </p>
-
-
-                        <p
-                            id="reserva"
-                            class="text-xl font-bold text-blue-600 mt-2"
-                        >
-
-                            R$ 0,00
-
-                        </p>
-
-
-                        <p class="text-xs text-gray-400 mt-1">
-
-                            20% do que entrou
-
-                        </p>
-
-
-                    </div>
-
-
-
-                    <!-- OPORTUNIDADES -->
-
-                    <div class="bg-[#eeeeee] rounded-[24px] p-5 border border-white/10">
-
-
-                        <p class="text-gray-500 text-sm">
-
-                            Oportunidades
-
-                        </p>
-
-
-                        <p
-                            id="oportunidades"
-                            class="text-xl font-bold text-purple-600 mt-2"
-                        >
-
-                            R$ 0,00
-
-                        </p>
-
-
-                        <p class="text-xs text-gray-400 mt-1">
-
-                            20% do que entrou
-
-                        </p>
-
-
-                    </div>
-
-
-
-                    <!-- LIVRE -->
-
-                    <div class="bg-[#eeeeee] rounded-[24px] p-5 border border-white/10">
-
-
-                        <p class="text-gray-500 text-sm">
-
-                            Livre para gastar
-
-                        </p>
-
-
-                        <p
-                            id="livre"
-                            class="text-xl font-bold text-green-600 mt-2"
-                        >
-
-                            R$ 0,00
-
-                        </p>
-
-
-                        <p class="text-xs text-gray-400 mt-1">
-
-                            10% do que entrou
-
-                        </p>
-
-
-                    </div>
-
-
-                </div>
-
-
-
-                <!-- QUANTO SAIU -->
-
-                <div class="bg-[#eeeeee] rounded-[24px] p-6 border border-white/10">
-
-
-                    <p class="text-gray-500 text-sm">
-
-                        Quanto saiu
-
-                    </p>
-
-
-                    <h2
-                        id="saidas"
-                        class="text-3xl font-bold text-red-600 mt-2"
-                    >
-
-                        R$ 0,00
-
-                    </h2>
-
-
-                </div>
-
-
-            </div>
-
-
-
-            <!-- ÁREA PRINCIPAL -->
-
-            <div class="space-y-5">
-
-
-
-                <!-- CATEGORIAS -->
-
-                <div class="hidden grid grid-cols-1 lg:grid-cols-2 gap-5">
-
-
-                    <!-- ENTRADAS POR CATEGORIA -->
-
-                    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm p-5 border">
-
-
-                        <h3 class="font-semibold dark:text-white">
-
-                            Entradas por categoria
-
-                        </h3>
-
-
-                        <div
-                            id="listaEntradasCategoria"
-                            class="mt-4 space-y-3"
-                        >
-                        </div>
-
-
-                    </div>
-
-
-
-                    <!-- SAÍDAS POR CATEGORIA -->
-
-                    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm p-5 border">
-
-
-                        <h3 class="font-semibold dark:text-white">
-
-                            Saídas por categoria
-
-                        </h3>
-
-
-                        <div
-                            id="listaSaidasCategoria"
-                            class="mt-4 space-y-3"
-                        >
-                        </div>
-
-
-                    </div>
-
-
-                </div>
-
-
-
-                <!-- ANÁLISES -->
-
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
-
-
-                    <!-- TOP GASTOS -->
-
-                    <div class="hidden bg-white dark:bg-gray-800 rounded-2xl shadow-sm p-5 border">
-
-
-                        <h3 class="font-semibold dark:text-white">
-
-                            Top 5 maiores gastos
-
-                        </h3>
-
-
-                        <div
-                            id="topGastos"
-                            class="mt-4 space-y-3"
-                        >
-                        </div>
-
-
-                    </div>
-
-
-
-                    <!-- COMPARAÇÃO -->
-
-                    <div class="hidden bg-white dark:bg-gray-800 rounded-2xl shadow-sm p-5 border">
-
-
-                        <h3 class="font-semibold dark:text-white">
-
-                            Comparação mensal
-
-                        </h3>
-
-
-                        <div class="mt-4">
-
-
-                            <p class="text-gray-500">
-
-                                Mês atual
-
-                            </p>
-
-
-                            <p
-                                id="mesAtual"
-                                class="text-2xl font-bold"
-                            >
-
-                                R$ 0,00
-
-                            </p>
-
-
-
-                            <p class="text-gray-500 mt-3">
-
-                                Mês anterior
-
-                            </p>
-
-
-                            <p
-                                id="mesAnterior"
-                                class="text-2xl font-bold"
-                            >
-
-                                R$ 0,00
-
-                            </p>
-
-
-                        </div>
-
-
-                    </div>
-
-
-                </div>
-
-
-
-                <!-- GRÁFICO -->
-
-                <div class="hidden bg-white dark:bg-gray-800 rounded-2xl shadow-sm p-5 border">
-
-
-                    <h3 class="font-semibold dark:text-white mb-4">
-
-                        Evolução diária
-
-                    </h3>
-
-
-                    <div
-                        id="graficoEvolucao"
-                        class="h-72"
-                    >
-                    </div>
-
-
-                </div>
-
-
-            </div>
-
-
-
-            <!-- ÁREA DE LANÇAMENTO -->
-
-            <div class="p-0 xl:p-6">
-
-
-                <button onclick="testarLogin()">
-
-                    Entrar com Google
-
-                </button>
-
-
-
-                <div class="flex justify-between items-center mb-6">
-
-
-                    <button
-                        id="themeBtn"
-                        class="hidden px-4 py-2 rounded-lg bg-gray-900 text-white dark:bg-white dark:text-black"
-                    >
-
-                        🌙 Tema
-
-                    </button>
-
-
-                </div>
-
-
-
-                <!-- FORMULÁRIO -->
-
-                <div class="bg-white rounded-3xl p-6 shadow-sm border border-gray-100">
-
-
-                    <div class="flex flex-col gap-4">
-
-
-                        <input
-                            id="command"
-                            type="text"
-                            placeholder="Ex: entrada 23,50 mercado taquaral"
-                            class="
-                            w-full
-                            h-14
-                            px-5
-                            rounded-2xl
-                            bg-gray-50
-                            border
-                            border-gray-200
-                            text-gray-800
-                            placeholder-gray-400
-                            outline-none
-                            transition
-                            focus:ring-4
-                            focus:ring-blue-100
-                            focus:border-blue-400
-                            "
-                        >
-
-
-
-                        <div class="flex gap-3">
-
-
-                            <button
-                                id="btnAdicionar"
-                                onclick="adicionar()"
-                                class="
-                                flex-1
-                                h-12
-                                rounded-2xl
-                                bg-blue-600
-                                text-white
-                                font-semibold
-                                shadow-md
-                                shadow-blue-200
-                                transition-all
-                                hover:bg-blue-700
-                                active:scale-[0.98]
-                                "
-                            >
-
-                                Adicionar
-
-                            </button>
-
-
-
-                            <button
-                                id="btnCancelar"
-                                onclick="cancelarEdicao()"
-                                class="
-                                hidden
-                                h-12
-                                px-6
-                                rounded-2xl
-                                bg-gray-100
-                                text-gray-700
-                                font-semibold
-                                transition-all
-                                hover:bg-gray-200
-                                active:scale-[0.98]
-                                "
-                            >
-
-                                Cancelar
-
-                            </button>
-
-
-                        </div>
-
-
-                    </div>
-
-
-                </div>
-
-
-
-                <!-- TABELA -->
-
-                <div class="mt-8">
-
-
-                    <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
-
-
-                        <div class="overflow-x-auto">
-
-
-                            <table class="w-full">
-
-
-                                <thead class="bg-gray-50">
-
-
-                                    <tr class="text-gray-500 text-sm">
-
-
-                                        <th class="p-4 text-left font-semibold">
-
-                                            Data
-
-                                        </th>
-
-
-                                        <th class="p-4 text-left font-semibold">
-
-                                            Tipo
-
-                                        </th>
-
-
-                                        <th class="p-4 text-left font-semibold">
-
-                                            Categoria
-
-                                        </th>
-
-
-                                        <th class="p-4 text-left font-semibold">
-
-                                            Valor
-
-                                        </th>
-
-
-                                        <th class="p-4 text-left font-semibold">
-
-                                            Usuário
-
-                                        </th>
-
-
-                                        <th class="p-4 text-left font-semibold">
-
-                                            Descrição
-
-                                        </th>
-
-
-                                        <th class="p-4 text-center font-semibold">
-
-                                            Ações
-
-                                        </th>
-
-
-                                    </tr>
-
-
-                                </thead>
-
-
-
-                                <tbody
-                                    id="tbody"
-                                    class="divide-y divide-gray-100"
-                                >
-                                </tbody>
-
-
-                            </table>
-
-
-                        </div>
-
-
-                    </div>
-
-
-                </div>
-
-
-            </div>
-
-
-        </main>
+        </button>
 
 
     </div>
 
 
 
-    <!-- SCRIPTS -->
-
-    <script src="assets/js/tema.js"></script>
-
-    <script src="assets/js/loader.js"></script>
-
-
-    <script
-        type="module"
-        src="app.js"
-    >
-    </script>
+    <div class="
+    bg-white
+    rounded-3xl
+    shadow-sm
+    border
+    border-gray-100
+    overflow-hidden
+    ">
 
 
-
-    <!-- SIDEBAR -->
-
-    <script>
-
-        function toggleSidebar() {
-
-            const sidebar =
-                document.getElementById("sidebar");
+        <div class="overflow-x-auto">
 
 
-            if (window.innerWidth < 1280) {
-
-                sidebar.classList.toggle(
-                    "-translate-x-full"
-                );
-
-                return;
-
-            }
+            <table class="w-full min-w-[800px]">
 
 
-            sidebar.classList.toggle(
-                "collapsed"
-            );
+                <thead class="bg-gray-50">
 
 
-            document
-                .querySelector(
-                    ".user-content-box"
-                )
-                .classList.toggle(
-                    "xl:flex"
-                );
+                    <tr class="text-gray-500 text-sm">
+
+
+                        <th class="p-4 text-left">
+                            Data
+                        </th>
+
+
+                        <th class="p-4 text-left">
+                            Tipo
+                        </th>
+
+
+                        <th class="p-4 text-left">
+                            Categoria
+                        </th>
+
+
+                        <th class="p-4 text-left">
+                            Valor
+                        </th>
+
+
+                        <th class="p-4 text-left">
+                            Usuário
+                        </th>
+
+
+                        <th class="p-4 text-left">
+                            Descrição
+                        </th>
+
+
+                        <th class="p-4 text-center">
+                            Ações
+                        </th>
+
+
+                    </tr>
+
+
+                </thead>
+
+
+
+                <tbody
+                    id="tbody"
+                    class="divide-y divide-gray-100"
+                >
+
+                </tbody>
+
+
+            </table>
+
+
+        </div>
+
+
+    </div>
+
+
+</section>
+
+
+</main>
+
+
+</div>
+
+
+
+<!-- SCRIPTS -->
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<script src="https://unpkg.com/lucide@latest"></script>
+
+<script>
+    lucide.createIcons();
+</script>
+
+
+<script src="assets/js/tema.js"></script>
+
+<script src="assets/js/loader.js"></script>
+
+
+<script
+    type="module"
+    src="app.js"
+></script>
+
+
+
+<script>
+
+function toggleSidebar() {
+
+    const sidebar =
+        document.getElementById("sidebar");
+
+
+    if (window.innerWidth < 1280) {
+
+        sidebar.classList.toggle(
+            "-translate-x-full"
+        );
+
+        return;
+
+    }
+
+
+    sidebar.classList.toggle(
+        "collapsed"
+    );
+
+}
+
+</script>
+
+
+
+<script>
+
+const btn =
+    document.getElementById(
+        "fullscreenToggle"
+    );
+
+
+const iconMaximize =
+    document.getElementById(
+        "iconMaximize"
+    );
+
+
+const iconMinimize =
+    document.getElementById(
+        "iconMinimize"
+    );
+
+
+btn.addEventListener(
+    "click",
+    async () => {
+
+        if (!document.fullscreenElement) {
+
+            await document
+                .documentElement
+                .requestFullscreen();
+
+        } else {
+
+            await document
+                .exitFullscreen();
 
         }
 
-    </script>
+    }
+);
 
 
+document.addEventListener(
+    "fullscreenchange",
+    () => {
 
-    <!-- LUCIDE -->
+        if (document.fullscreenElement) {
 
-    <script src="https://unpkg.com/lucide@latest"></script>
+            iconMaximize.style.display =
+                "none";
 
+            iconMinimize.style.display =
+                "block";
 
-    <script>
+        } else {
 
-        lucide.createIcons();
+            iconMaximize.style.display =
+                "block";
 
-    </script>
+            iconMinimize.style.display =
+                "none";
 
+        }
 
+    }
+);
 
-    <!-- TAILWIND -->
-
-    <script src="https://cdn.tailwindcss.com"></script>
-
-
-
-    <!-- FULLSCREEN -->
-
-    <script>
-
-        const btn =
-            document.getElementById(
-                "fullscreenToggle"
-            );
-
-
-        const iconMaximize =
-            document.getElementById(
-                "iconMaximize"
-            );
-
-
-        const iconMinimize =
-            document.getElementById(
-                "iconMinimize"
-            );
-
-
-        btn.addEventListener(
-            "click",
-            async () => {
-
-                if (
-                    !document.fullscreenElement
-                ) {
-
-                    await document
-                        .documentElement
-                        .requestFullscreen();
-
-                } else {
-
-                    await document
-                        .exitFullscreen();
-
-                }
-
-            }
-        );
-
-
-        document.addEventListener(
-            "fullscreenchange",
-            () => {
-
-                if (
-                    document.fullscreenElement
-                ) {
-
-                    iconMaximize.style.display =
-                        "none";
-
-                    iconMinimize.style.display =
-                        "block";
-
-                } else {
-
-                    iconMaximize.style.display =
-                        "block";
-
-                    iconMinimize.style.display =
-                        "none";
-
-                }
-
-            }
-        );
-
-    </script>
+</script>
 
 
 </body>
