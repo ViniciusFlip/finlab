@@ -50,17 +50,22 @@ if (user) {
 
     photo.src = user.photoURL || "assets/img/avatar.png";
 
-    nome.textContent = user.displayName || "Usuário";
+    nome.textContent =
+        user.displayName || "Usuário";
 
-    email.textContent = user.email || "";
+    email.textContent =
+        user.email || "";
 
 } else {
 
-    photo.src = "assets/img/avatar.png";
+    photo.src =
+        "assets/img/avatar.png";
 
-    nome.textContent = "Não autenticado";
+    nome.textContent =
+        "Não autenticado";
 
-    email.textContent = "";
+    email.textContent =
+        "";
 
 }
 
@@ -70,7 +75,8 @@ async function testarLogin() {
 
 try {
 
-    const user = await loginGoogle();
+    const user =
+        await loginGoogle();
 
     console.log(user);
 
@@ -84,9 +90,12 @@ try {
 
 async function atualizarTela() {
 
-console.trace("ATUALIZAR TELA CHAMOU");
+console.trace(
+    "ATUALIZAR TELA CHAMOU"
+);
 
-data = await listarLancamentos();
+data =
+    await listarLancamentos();
 
 render();
 
@@ -94,51 +103,218 @@ render();
 
 function formatarMoeda(valor) {
 
-return valor.toLocaleString("pt-BR", {
-    style: "currency",
-    currency: "BRL"
-});
+return valor.toLocaleString(
+    "pt-BR",
+    {
+        style: "currency",
+        currency: "BRL"
+    }
+);
 
 }
+
+/*
+
+PLANO FINANCEIRO
+
+50% Necessidades
+20% Reserva
+20% Oportunidades
+10% Livre
+
+O cálculo é feito sobre
+todas as entradas registradas.
+
+*/
+
+function calcularPlanoFinanceiro(entradas) {
+
+return {
+
+    necessidades:
+        entradas * 0.50,
+
+    reserva:
+        entradas * 0.20,
+
+    oportunidades:
+        entradas * 0.20,
+
+    livre:
+        entradas * 0.10
+
+};
+
+}
+
+/*
+
+ATUALIZAR ELEMENTO
+
+Atualiza somente se o ID
+existir no HTML.
+
+Isso evita quebrar a aplicação
+antes de criarmos os novos cards.
+
+*/
+
+function atualizarElemento(id, valor) {
+
+const elemento =
+    document.getElementById(id);
+
+if (!elemento) return;
+
+elemento.textContent =
+    formatarMoeda(valor);
+
+}
+
+/*
+
+DASHBOARD
+
+*/
 
 function atualizarDashboard() {
 
 let entradas = 0;
+
 let saidas = 0;
+
 
 data.forEach(item => {
 
-    if (item.tipo === "entrada") {
+    if (
+        item.tipo === "entrada"
+    ) {
 
-        entradas += item.valor;
+        entradas +=
+            Number(item.valor) || 0;
 
     } else {
 
-        saidas += item.valor;
+        saidas +=
+            Number(item.valor) || 0;
 
     }
 
 });
 
-const saldo = entradas - saidas;
 
-document.getElementById("entradas").innerHTML =
-    formatarMoeda(entradas);
+const saldo =
+    entradas - saidas;
 
-document.getElementById("saidas").innerHTML =
-    formatarMoeda(saidas);
 
-const saldoEl = document.getElementById("saldo");
+/*
+=============================
+CALCULAR DIVISÃO SAUDÁVEL
+=============================
+*/
 
-saldoEl.innerHTML =
-    formatarMoeda(saldo);
+const plano =
+    calcularPlanoFinanceiro(
+        entradas
+    );
 
-saldoEl.className =
-    `text-3xl font-bold mt-2 ${
-        saldo >= 0
-            ? "text-blue-600"
-            : "text-red-600"
-    }`;
+
+/*
+=============================
+DASHBOARD ATUAL
+=============================
+*/
+
+atualizarElemento(
+    "entradas",
+    entradas
+);
+
+atualizarElemento(
+    "saidas",
+    saidas
+);
+
+
+const saldoEl =
+    document.getElementById(
+        "saldo"
+    );
+
+
+if (saldoEl) {
+
+    saldoEl.textContent =
+        formatarMoeda(
+            saldo
+        );
+
+    saldoEl.className =
+        `text-3xl font-bold mt-2 ${
+            saldo >= 0
+                ? "text-blue-600"
+                : "text-red-600"
+        }`;
+
+}
+
+
+/*
+=============================
+NOVOS RESULTADOS
+
+Os elementos só aparecerão
+quando os IDs forem adicionados
+ao HTML.
+=============================
+*/
+
+atualizarElemento(
+    "necessidades",
+    plano.necessidades
+);
+
+
+atualizarElemento(
+    "reserva",
+    plano.reserva
+);
+
+
+atualizarElemento(
+    "oportunidades",
+    plano.oportunidades
+);
+
+
+atualizarElemento(
+    "livre",
+    plano.livre
+);
+
+
+/*
+=============================
+CONSOLE PARA TESTE
+=============================
+*/
+
+console.log(
+    "PLANO FINANCEIRO",
+    {
+        entradas,
+        saidas,
+        saldo,
+        necessidades:
+            plano.necessidades,
+        reserva:
+            plano.reserva,
+        oportunidades:
+            plano.oportunidades,
+        livre:
+            plano.livre
+    }
+);
 
 }
 
@@ -146,15 +322,28 @@ function cancelarEdicao() {
 
 editandoId = null;
 
-const input = document.getElementById("command");
+
+const input =
+    document.getElementById(
+        "command"
+    );
+
 
 input.value = "";
 
-document.getElementById("btnAdicionar").textContent =
+
+document.getElementById(
+    "btnAdicionar"
+).textContent =
     "Adicionar";
 
-document.getElementById("btnCancelar")
-    .classList.add("hidden");
+
+document.getElementById(
+    "btnCancelar"
+).classList.add(
+    "hidden"
+);
+
 
 input.focus();
 
@@ -162,41 +351,70 @@ input.focus();
 
 function render() {
 
-const tbody = document.getElementById("tbody");
+const tbody =
+    document.getElementById(
+        "tbody"
+    );
+
 
 tbody.innerHTML = "";
 
-data.forEach((item, index) => {
+
+data.forEach(item => {
 
     const dataBase =
-        item.data || item.createdAt;
+        item.data ||
+        item.createdAt;
 
-    const dataFormatada = dataBase
-        ? dataBase.toDate().toLocaleString(
-            "pt-BR",
-            {
-                day: "2-digit",
-                month: "2-digit",
-                year: "numeric",
-                hour: "2-digit",
-                minute: "2-digit"
-            }
-        )
-        : "--";
+
+    const dataFormatada =
+        dataBase
+            ? dataBase
+                .toDate()
+                .toLocaleString(
+                    "pt-BR",
+                    {
+                        day:
+                            "2-digit",
+
+                        month:
+                            "2-digit",
+
+                        year:
+                            "numeric",
+
+                        hour:
+                            "2-digit",
+
+                        minute:
+                            "2-digit"
+                    }
+                )
+            : "--";
 
 
     tbody.innerHTML += `
 
 <tr class="
-    border-b border-gray-200
-    ${item.tipo === "entrada"
-        ? "bg-green-50 hover:bg-green-100"
-        : "bg-red-50 hover:bg-red-100"}
-    transition
-"><td class="p-5 h-24 text-gray-700 dark:text-white">
-    ${dataFormatada}
+border-b border-gray-200
+${item.tipo === "entrada"
+    ? "bg-green-50 hover:bg-green-100"
+    : "bg-red-50 hover:bg-red-100"}
+transition
+"><td class="
+p-5
+h-24
+text-gray-700
+dark:text-white
+">${dataFormatada}
+
 </td><td class="p-5"><span class="
-px-4 py-2 rounded-full text-sm font-semibold
+px-4
+py-2
+rounded-full
+text-sm
+font-semibold
+
 ${item.tipo === "entrada"
 ? "bg-green-200 text-green-700"
 : "bg-red-200 text-red-700"}
@@ -204,39 +422,83 @@ ${item.tipo === "entrada"
 
 ${item.tipo}
 
-</span></td><td class="p-5 text-gray-700 dark:text-white">
-    ${item.categoria || "—"}
+</span></td><td class="
+p-5
+text-gray-700
+dark:text-white
+">${item.categoria || "—"}
+
 </td><td class="p-5"><span class="
-text-lg font-bold
+text-lg
+font-bold
+
 ${item.tipo === "entrada"
 ? "text-green-700"
 : "text-red-700"}
 ">
 
-${formatarMoeda(item.valor)}
+${formatarMoeda(
+Number(item.valor) || 0
+)}
 
-</span></td><td class="p-5 text-gray-700 dark:text-white">
-    ${item.userName || "—"}
-</td><td class="p-5 text-gray-700 dark:text-white">
-    ${item.descricao || "—"}
-</td><td class="p-5"><div class="flex gap-3 justify-center"><button
-onclick="editar('${item.id}')"
+</span></td><td class="
+p-5
+text-gray-700
+dark:text-white
+">${item.userName || "—"}
+
+</td><td class="
+p-5
+text-gray-700
+dark:text-white
+">${item.descricao || "—"}
+
+</td><td class="p-5"><div class="
+flex
+gap-3
+justify-center
+"><button
+
+onclick="
+editar('${item.id}')
+"
+
 class="
-h-10 px-5 rounded-xl
-bg-yellow-400 hover:bg-yellow-500
-text-white font-semibold
-transition active:scale-95
+h-10
+px-5
+rounded-xl
+
+bg-yellow-400
+hover:bg-yellow-500
+
+text-white
+font-semibold
+
+transition
+active:scale-95
 ">
 
 Editar
 
 </button><button
-onclick="remover('${item.id}')"
+
+onclick="
+remover('${item.id}')
+"
+
 class="
-h-10 px-5 rounded-xl
-bg-red-500 hover:bg-red-600
-text-white font-semibold
-transition active:scale-95
+h-10
+px-5
+rounded-xl
+
+bg-red-500
+hover:bg-red-600
+
+text-white
+font-semibold
+
+transition
+active:scale-95
 ">
 
 Excluir
@@ -252,22 +514,35 @@ atualizarDashboard();
 
 async function adicionar() {
 
-const input = document.getElementById("command");
+const input =
+    document.getElementById(
+        "command"
+    );
 
-const texto = input.value.trim();
+
+const texto =
+    input.value.trim();
+
 
 if (!texto) return;
 
 
-const partes = texto.split(" ");
+const partes =
+    texto.split(" ");
+
 
 const tipo =
     partes[0].toLowerCase();
 
+
 const valor =
     parseFloat(
-        partes[1].replace(",", ".")
+        partes[1].replace(
+            ",",
+            "."
+        )
     );
+
 
 const categoria =
     partes[2];
@@ -281,19 +556,32 @@ let data = null;
 
 
 for (
-    let i = partes.length - 1;
+    let i =
+        partes.length - 1;
+
     i >= 0;
+
     i--
 ) {
 
     const possivelData =
-        partes.slice(i).join(" ");
+        partes
+            .slice(i)
+            .join(" ");
 
-    if (dataRegex.test(possivelData)) {
 
-        data = possivelData;
+    if (
+        dataRegex.test(
+            possivelData
+        )
+    ) {
+
+        data =
+            possivelData;
+
 
         partes.splice(i);
+
 
         break;
 
@@ -303,32 +591,39 @@ for (
 
 
 const descricao =
-    partes.slice(3).join(" ");
-
-
-console.log({
-    tipo,
-    valor,
-    categoria,
-    descricao,
-    data
-});
+    partes
+        .slice(3)
+        .join(" ");
 
 
 if (
-    (tipo !== "entrada" &&
-        tipo !== "saida") ||
+
+    (
+        tipo !== "entrada" &&
+        tipo !== "saida"
+    )
+
+    ||
+
     isNaN(valor)
+
 ) {
 
-    alert("Comando inválido");
+    alert(
+        "Comando inválido"
+    );
 
     return;
 
 }
 
 
-if (!categoriaExiste(tipo, categoria)) {
+if (
+    !categoriaExiste(
+        tipo,
+        categoria
+    )
+) {
 
     alert(
         `Categoria "${categoria}" não encontrada para ${tipo}.`
@@ -353,7 +648,8 @@ if (editandoId) {
     );
 
 
-    editandoId = null;
+    editandoId =
+        null;
 
 
     document.getElementById(
@@ -364,7 +660,9 @@ if (editandoId) {
 
     document.getElementById(
         "btnCancelar"
-    ).classList.add("hidden");
+    ).classList.add(
+        "hidden"
+    );
 
 
 } else {
@@ -389,14 +687,18 @@ await atualizarTela();
 
 async function remover(id) {
 
-const confirmar = confirm(
-    "Deseja realmente excluir este lançamento?"
-);
+const confirmar =
+    confirm(
+        "Deseja realmente excluir este lançamento?"
+    );
+
 
 if (!confirmar) return;
 
 
-await excluirLancamento(id);
+await excluirLancamento(
+    id
+);
 
 
 await atualizarTela();
@@ -406,14 +708,19 @@ await atualizarTela();
 function editar(id) {
 
 const lancamento =
-    data.find(item => item.id === id);
+    data.find(
+        item =>
+            item.id === id
+    );
 
 
 if (!lancamento) return;
 
 
 const input =
-    document.getElementById("command");
+    document.getElementById(
+        "command"
+    );
 
 
 const dataObj =
@@ -421,7 +728,8 @@ const dataObj =
     lancamento.createdAt;
 
 
-let dataFormatada = "";
+let dataFormatada =
+    "";
 
 
 if (dataObj) {
@@ -431,13 +739,21 @@ if (dataObj) {
 
 
     const dia =
-        String(d.getDate())
-            .padStart(2, "0");
+        String(
+            d.getDate()
+        ).padStart(
+            2,
+            "0"
+        );
 
 
     const mes =
-        String(d.getMonth() + 1)
-            .padStart(2, "0");
+        String(
+            d.getMonth() + 1
+        ).padStart(
+            2,
+            "0"
+        );
 
 
     const ano =
@@ -462,7 +778,8 @@ input.value =
     );
 
 
-editandoId = id;
+editandoId =
+    id;
 
 
 document.getElementById(
@@ -473,7 +790,9 @@ document.getElementById(
 
 document.getElementById(
     "btnCancelar"
-).classList.remove("hidden");
+).classList.remove(
+    "hidden"
+);
 
 
 input.focus();
@@ -481,19 +800,25 @@ input.focus();
 }
 
 document
-.getElementById("btnAdicionar")
+.getElementById(
+"btnAdicionar"
+)
 .addEventListener(
 "click",
 adicionar
 );
 
 document
-.getElementById("command")
+.getElementById(
+"command"
+)
 .addEventListener(
 "keypress",
 (e) => {
 
-        if (e.key === "Enter") {
+        if (
+            e.key === "Enter"
+        ) {
 
             adicionar();
 
@@ -503,13 +828,19 @@ document
 );
 
 document
-.getElementById("themeBtn")
+.getElementById(
+"themeBtn"
+)
 .addEventListener(
 "click",
 () => {
 
-        document.documentElement
-            .classList.toggle("dark");
+        document
+            .documentElement
+            .classList
+            .toggle(
+                "dark"
+            );
 
     }
 );
@@ -520,7 +851,14 @@ await atualizarTela();
 
 })();
 
-window.editar = editar;
-window.remover = remover;
-window.cancelarEdicao = cancelarEdicao;
-window.testarLogin = testarLogin;
+window.editar =
+editar;
+
+window.remover =
+remover;
+
+window.cancelarEdicao =
+cancelarEdicao;
+
+window.testarLogin =
+testarLogin;
