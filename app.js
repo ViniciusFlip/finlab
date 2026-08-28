@@ -2,16 +2,13 @@ import {
     salvarLancamento,
     listarLancamentos,
     excluirLancamento,
-    atualizarLancamento,
-
+    atualizarLancamento
 } from "./services/lancamentos/lancamentos.service.js";
-
 
 import {
     loginGoogle,
     onAuthChange
 } from "./services/auth/auth.service.js";
-
 
 import {
     categoriaExiste
@@ -20,24 +17,68 @@ import {
 
 console.log("APP CARREGOU");
 
-
 let data = [];
-
 let editandoId = null;
 
 
+/* ================================
+   FORMATAÇÃO
+================================ */
 
-/* =========================
+function formatarMoeda(valor) {
+
+    return Number(valor || 0).toLocaleString(
+        "pt-BR",
+        {
+            style: "currency",
+            currency: "BRL"
+        }
+    );
+
+}
+
+
+/* ================================
+   DATA DO LANÇAMENTO
+================================ */
+
+function obterData(item) {
+
+    const dataBase =
+        item.data ||
+        item.createdAt;
+
+    if (!dataBase) return null;
+
+
+    if (typeof dataBase.toDate === "function") {
+
+        return dataBase.toDate();
+
+    }
+
+
+    if (dataBase instanceof Date) {
+
+        return dataBase;
+
+    }
+
+
+    return null;
+
+}
+
+
+/* ================================
    AUTENTICAÇÃO
-========================= */
+================================ */
 
 onAuthChange((user) => {
 
     if (user) {
 
-        console.log("Usuário logado:");
-
-        console.log(user);
+        console.log("Usuário logado:", user);
 
         atualizarUsuario(user);
 
@@ -52,7 +93,6 @@ onAuthChange((user) => {
 });
 
 
-
 function atualizarUsuario(user) {
 
     const nome =
@@ -65,43 +105,30 @@ function atualizarUsuario(user) {
         document.getElementById("user-photo");
 
 
-    if (!nome || !email) return;
+    if (!nome || !email || !photo) return;
 
 
     if (user) {
 
-        if (photo) {
-
-            photo.src =
-                user.photoURL ||
-                "assets/img/avatar.png";
-
-        }
-
+        photo.src =
+            user.photoURL ||
+            "assets/img/avatar.png";
 
         nome.textContent =
             user.displayName ||
             "Usuário";
 
-
         email.textContent =
             user.email ||
             "";
 
-
     } else {
 
-        if (photo) {
-
-            photo.src =
-                "assets/img/avatar.png";
-
-        }
-
+        photo.src =
+            "assets/img/avatar.png";
 
         nome.textContent =
             "Não autenticado";
-
 
         email.textContent =
             "";
@@ -110,11 +137,6 @@ function atualizarUsuario(user) {
 
 }
 
-
-
-/* =========================
-   LOGIN
-========================= */
 
 async function testarLogin() {
 
@@ -129,20 +151,23 @@ async function testarLogin() {
 
         console.error(error);
 
+        alert(
+            "Não foi possível realizar o login."
+        );
+
     }
 
 }
 
 
-
-/* =========================
-   ATUALIZAR TELA
-========================= */
+/* ================================
+   CARREGAR DADOS
+================================ */
 
 async function atualizarTela() {
 
-    console.trace(
-        "ATUALIZAR TELA CHAMOU"
+    console.log(
+        "Atualizando tela..."
     );
 
 
@@ -150,137 +175,289 @@ async function atualizarTela() {
         await listarLancamentos();
 
 
-    render();
-
-
     atualizarDashboard();
 
-}
-
-
-
-/* =========================
-   FORMATAR DINHEIRO
-========================= */
-
-function formatarMoeda(valor) {
-
-    return Number(valor || 0)
-        .toLocaleString(
-            "pt-BR",
-            {
-                style: "currency",
-                currency: "BRL"
-            }
-        );
+    render();
 
 }
 
 
+/* ================================
+   FILTRO DE PERÍODO
+================================ */
 
-/* =========================
-   DASHBOARD FINANCEIRO
-========================= */
+function filtrarPorPeriodo(lista) {
 
-function atualizarDashboard() {
-
-
-    let entradas = 0;
-
-    let saidas = 0;
+    const select =
+        document.getElementById("periodo");
 
 
-
-    data.forEach((item) => {
-
-
-        const valor =
-            Number(item.valor) || 0;
+    const periodo =
+        select
+            ? select.value
+            : "todo";
 
 
-        if (item.tipo === "entrada") {
+    if (periodo === "todo") {
 
-            entradas += valor;
+        return lista;
 
-        } else if (item.tipo === "saida") {
+    }
 
-            saidas += valor;
+
+    const agora =
+        new Date();
+
+
+    return lista.filter((item) => {
+
+        const dataItem =
+            obterData(item);
+
+
+        if (!dataItem) {
+
+            return false;
 
         }
 
 
+        /* HOJE */
+
+        if (periodo === "hoje") {
+
+            return (
+                dataItem.getDate() ===
+                    agora.getDate() &&
+
+                dataItem.getMonth() ===
+                    agora.getMonth() &&
+
+                dataItem.getFullYear() ===
+                    agora.getFullYear()
+            );
+
+        }
+
+
+        /* ESTE MÊS */
+
+        if (periodo === "mes") {
+
+            return (
+                dataItem.getMonth() ===
+                    agora.getMonth() &&
+
+                dataItem.getFullYear() ===
+                    agora.getFullYear()
+            );
+
+        }
+
+
+        /* ESTA SEMANA */
+
+        if (periodo === "semana") {
+
+            const hoje =
+                new Date(
+                    agora.getFullYear(),
+                    agora.getMonth(),
+                    agora.getDate()
+                );
+
+
+            const diaSemana =
+                hoje.getDay();
+
+
+            const inicioSemana =
+                new Date(hoje);
+
+
+            inicioSemana.setDate(
+                hoje.getDate() -
+                (
+                    diaSemana === 0
+                        ? 6
+                        : diaSemana - 1
+                )
+            );
+
+
+            const fimSemana =
+                new Date(inicioSemana);
+
+
+            fimSemana.setDate(
+                inicioSemana.getDate() + 6
+            );
+
+
+            fimSemana.setHours(
+                23,
+                59,
+                59,
+                999
+            );
+
+
+            return (
+                dataItem >= inicioSemana &&
+                dataItem <= fimSemana
+            );
+
+        }
+
+
+        return true;
+
+    });
+
+}
+
+
+/* ================================
+   DASHBOARD
+================================ */
+
+function atualizarDashboard() {
+
+
+    /* --------------------------------
+       SALDO REAL
+
+       Sempre calcula TODOS
+       os lançamentos.
+    -------------------------------- */
+
+    let entradasTotais = 0;
+
+    let saidasTotais = 0;
+
+
+    data.forEach((item) => {
+
+        const valor =
+            Number(item.valor || 0);
+
+
+        if (
+            item.tipo === "entrada"
+        ) {
+
+            entradasTotais +=
+                valor;
+
+        }
+
+
+        if (
+            item.tipo === "saida"
+        ) {
+
+            saidasTotais +=
+                valor;
+
+        }
+
     });
 
 
-
-    /*
-    =========================
-
-    SALDO ATUAL REAL
-
-    Tudo que entrou
-    MENOS
-    Tudo que saiu
-
-    =========================
-    */
-
     const saldo =
-        entradas - saidas;
+        entradasTotais -
+        saidasTotais;
 
 
+    /* --------------------------------
+       MOVIMENTAÇÃO DO PERÍODO
+    -------------------------------- */
 
-    /*
-    =========================
-
-    DINHEIRO DISPONÍVEL
-
-    Se o saldo for negativo,
-    não dividimos dinheiro
-    que não existe.
-
-    =========================
-    */
-
-    const dinheiroDisponivel =
-        Math.max(saldo, 0);
+    const dadosPeriodo =
+        filtrarPorPeriodo(data);
 
 
+    let entradasPeriodo = 0;
 
-    /*
-    =========================
+    let saidasPeriodo = 0;
 
-    DIVISÃO DO DINHEIRO
-    BASEADA NO SALDO ATUAL
 
-    50% Necessidades
-    20% Reserva
-    20% Oportunidades
-    10% Livre
+    dadosPeriodo.forEach((item) => {
 
-    =========================
-    */
+        const valor =
+            Number(item.valor || 0);
+
+
+        if (
+            item.tipo === "entrada"
+        ) {
+
+            entradasPeriodo +=
+                valor;
+
+        }
+
+
+        if (
+            item.tipo === "saida"
+        ) {
+
+            saidasPeriodo +=
+                valor;
+
+        }
+
+    });
+
+
+    /* --------------------------------
+       DIVISÃO DO SALDO ATUAL
+
+       50% Necessidades
+       20% Reserva
+       20% Oportunidades
+       10% Livre
+    -------------------------------- */
+
+
+    const saldoPositivo =
+        Math.max(0, saldo);
+
 
     const necessidades =
-        dinheiroDisponivel * 0.50;
+        saldoPositivo * 0.50;
 
 
     const reserva =
-        dinheiroDisponivel * 0.20;
+        saldoPositivo * 0.20;
 
 
     const oportunidades =
-        dinheiroDisponivel * 0.20;
+        saldoPositivo * 0.20;
 
 
     const livre =
-        dinheiroDisponivel * 0.10;
+        saldoPositivo * 0.10;
 
 
+    /* --------------------------------
+       POSSO GASTAR AGORA
+    -------------------------------- */
 
-    /* =========================
-       ELEMENTOS
-    ========================= */
+    const possoGastar =
+        livre;
+
+
+    /* --------------------------------
+       ATUALIZAR ELEMENTOS
+    -------------------------------- */
+
+
+    const saldoEl =
+        document.getElementById(
+            "saldo"
+        );
+
 
     const entradasEl =
         document.getElementById(
@@ -291,12 +468,6 @@ function atualizarDashboard() {
     const saidasEl =
         document.getElementById(
             "saidas"
-        );
-
-
-    const saldoEl =
-        document.getElementById(
-            "saldo"
         );
 
 
@@ -324,51 +495,23 @@ function atualizarDashboard() {
         );
 
 
-
-    /* =========================
-       ATUALIZAR VALORES
-    ========================= */
-
-
-    if (entradasEl) {
-
-        entradasEl.textContent =
-            formatarMoeda(
-                entradas
-            );
-
-    }
+    const possoGastarEl =
+        document.getElementById(
+            "possoGastar"
+        );
 
 
-
-    if (saidasEl) {
-
-        saidasEl.textContent =
-            formatarMoeda(
-                saidas
-            );
-
-    }
-
-
+    /* SALDO */
 
     if (saldoEl) {
 
         saldoEl.textContent =
-            formatarMoeda(
-                saldo
-            );
+            formatarMoeda(saldo);
 
-
-        /*
-        Saldo positivo = azul
-
-        Saldo negativo = vermelho
-        */
 
         saldoEl.className =
             `
-            text-3xl
+            text-4xl
             font-bold
             mt-2
             ${
@@ -381,6 +524,29 @@ function atualizarDashboard() {
     }
 
 
+    /* PERÍODO */
+
+    if (entradasEl) {
+
+        entradasEl.textContent =
+            formatarMoeda(
+                entradasPeriodo
+            );
+
+    }
+
+
+    if (saidasEl) {
+
+        saidasEl.textContent =
+            formatarMoeda(
+                saidasPeriodo
+            );
+
+    }
+
+
+    /* DIVISÃO */
 
     if (necessidadesEl) {
 
@@ -390,7 +556,6 @@ function atualizarDashboard() {
             );
 
     }
-
 
 
     if (reservaEl) {
@@ -403,7 +568,6 @@ function atualizarDashboard() {
     }
 
 
-
     if (oportunidadesEl) {
 
         oportunidadesEl.textContent =
@@ -412,7 +576,6 @@ function atualizarDashboard() {
             );
 
     }
-
 
 
     if (livreEl) {
@@ -425,40 +588,23 @@ function atualizarDashboard() {
     }
 
 
+    /* POSSO GASTAR */
 
-    /*
-    =========================
+    if (possoGastarEl) {
 
-    CONSOLE PARA CONFERÊNCIA
+        possoGastarEl.textContent =
+            formatarMoeda(
+                possoGastar
+            );
 
-    =========================
-    */
-
-    console.log({
-
-        entradas,
-
-        saidas,
-
-        saldo,
-
-        necessidades,
-
-        reserva,
-
-        oportunidades,
-
-        livre
-
-    });
+    }
 
 }
 
 
-
-/* =========================
+/* ================================
    CANCELAR EDIÇÃO
-========================= */
+================================ */
 
 function cancelarEdicao() {
 
@@ -471,39 +617,51 @@ function cancelarEdicao() {
         );
 
 
-    input.value = "";
+    if (input) {
+
+        input.value = "";
+
+        input.focus();
+
+    }
 
 
-    document
-        .getElementById(
+    const btnAdicionar =
+        document.getElementById(
             "btnAdicionar"
-        )
-        .textContent =
-        "Adicionar";
-
-
-    document
-        .getElementById(
-            "btnCancelar"
-        )
-        .classList
-        .add(
-            "hidden"
         );
 
 
-    input.focus();
+    const btnCancelar =
+        document.getElementById(
+            "btnCancelar"
+        );
+
+
+    if (btnAdicionar) {
+
+        btnAdicionar.textContent =
+            "Adicionar";
+
+    }
+
+
+    if (btnCancelar) {
+
+        btnCancelar.classList.add(
+            "hidden"
+        );
+
+    }
 
 }
 
 
-
-/* =========================
+/* ================================
    RENDERIZAR TABELA
-========================= */
+================================ */
 
 function render() {
-
 
     const tbody =
         document.getElementById(
@@ -517,222 +675,176 @@ function render() {
     tbody.innerHTML = "";
 
 
-
     data.forEach((item) => {
 
 
-        /*
-        DATA
-
-        Pode existir:
-        item.data
-
-        ou:
-        item.createdAt
-        */
-
-        const dataBase =
-            item.data ||
-            item.createdAt;
+        const dataObj =
+            obterData(item);
 
 
+        const dataFormatada =
+            dataObj
+                ? dataObj.toLocaleString(
+                    "pt-BR",
+                    {
+                        day: "2-digit",
+                        month: "2-digit",
+                        year: "numeric",
+                        hour: "2-digit",
+                        minute: "2-digit"
+                    }
+                )
+                : "--";
 
-        let dataFormatada =
-            "--";
+
+        const tipoClasse =
+            item.tipo === "entrada"
+                ? "bg-green-100 text-green-700"
+                : "bg-red-100 text-red-700";
 
 
-
-        if (
-            dataBase &&
-            typeof dataBase.toDate === "function"
-        ) {
-
-            dataFormatada =
-                dataBase
-                    .toDate()
-                    .toLocaleString(
-                        "pt-BR",
-                        {
-                            day: "2-digit",
-                            month: "2-digit",
-                            year: "numeric",
-                            hour: "2-digit",
-                            minute: "2-digit"
-                        }
-                    );
-
-        }
-
+        const valorClasse =
+            item.tipo === "entrada"
+                ? "text-green-600"
+                : "text-red-600";
 
 
         tbody.innerHTML += `
 
-<tr
-    class="
-    border-b
-    border-gray-200
-    ${
-        item.tipo === "entrada"
-            ? "bg-green-50 hover:bg-green-100"
-            : "bg-red-50 hover:bg-red-100"
-    }
-    transition
-    "
->
+        <tr class="hover:bg-gray-50 transition">
+
+            <td class="p-4 text-gray-700 whitespace-nowrap">
+
+                ${dataFormatada}
+
+            </td>
 
 
-<td class="p-5 h-24 text-gray-700 dark:text-white">
+            <td class="p-4">
 
-    ${dataFormatada}
+                <span
+                    class="
+                    inline-flex
+                    px-3
+                    py-1
+                    rounded-full
+                    text-xs
+                    font-semibold
+                    ${tipoClasse}
+                    "
+                >
 
-</td>
+                    ${item.tipo}
 
+                </span>
 
-
-<td class="p-5">
-
-
-<span
-    class="
-    px-4
-    py-2
-    rounded-full
-    text-sm
-    font-semibold
-    ${
-        item.tipo === "entrada"
-            ? "bg-green-200 text-green-700"
-            : "bg-red-200 text-red-700"
-    }
-    "
->
-
-    ${item.tipo}
-
-</span>
+            </td>
 
 
-</td>
+            <td class="p-4 text-gray-700">
+
+                ${item.categoria || "—"}
+
+            </td>
 
 
+            <td class="p-4">
 
-<td class="p-5 text-gray-700 dark:text-white">
+                <span
+                    class="
+                    font-bold
+                    ${valorClasse}
+                    "
+                >
 
-    ${item.categoria || "—"}
+                    ${formatarMoeda(item.valor)}
 
-</td>
+                </span>
 
-
-
-<td class="p-5">
-
-
-<span
-    class="
-    text-lg
-    font-bold
-    ${
-        item.tipo === "entrada"
-            ? "text-green-700"
-            : "text-red-700"
-    }
-    "
->
-
-    ${formatarMoeda(item.valor)}
-
-</span>
+            </td>
 
 
-</td>
+            <td class="p-4 text-gray-600">
+
+                ${item.userName || "—"}
+
+            </td>
 
 
+            <td class="p-4 text-gray-600">
 
-<td class="p-5 text-gray-700 dark:text-white">
+                ${item.descricao || "—"}
 
-    ${item.userName || "—"}
-
-</td>
-
+            </td>
 
 
-<td class="p-5 text-gray-700 dark:text-white">
+            <td class="p-4">
 
-    ${item.descricao || "—"}
 
-</td>
+                <div class="flex justify-center gap-2">
+
+
+                    <button
+                        onclick="editar('${item.id}')"
+                        class="
+                        h-9
+                        px-4
+                        rounded-xl
+                        bg-yellow-400
+                        text-white
+                        text-sm
+                        font-semibold
+                        hover:bg-yellow-500
+                        transition
+                        "
+                    >
+
+                        Editar
+
+                    </button>
 
 
 
-<td class="p-5">
+                    <button
+                        onclick="remover('${item.id}')"
+                        class="
+                        h-9
+                        px-4
+                        rounded-xl
+                        bg-red-500
+                        text-white
+                        text-sm
+                        font-semibold
+                        hover:bg-red-600
+                        transition
+                        "
+                    >
+
+                        Excluir
+
+                    </button>
 
 
-<div class="flex gap-3 justify-center">
+                </div>
 
 
-<button
-    onclick="editar('${item.id}')"
-    class="
-    h-10
-    px-5
-    rounded-xl
-    bg-yellow-400
-    hover:bg-yellow-500
-    text-white
-    font-semibold
-    transition
-    active:scale-95
-    "
->
-
-    Editar
-
-</button>
+            </td>
 
 
+        </tr>
 
-<button
-    onclick="remover('${item.id}')"
-    class="
-    h-10
-    px-5
-    rounded-xl
-    bg-red-500
-    hover:bg-red-600
-    text-white
-    font-semibold
-    transition
-    active:scale-95
-    "
->
-
-    Excluir
-
-</button>
-
-
-</div>
-
-
-</td>
-
-
-</tr>
-
-`;
+        `;
 
     });
 
 }
 
 
-
-/* =========================
-   ADICIONAR LANÇAMENTO
-========================= */
+/* ================================
+   ADICIONAR / EDITAR
+================================ */
 
 async function adicionar() {
-
 
     const input =
         document.getElementById(
@@ -747,54 +859,31 @@ async function adicionar() {
     if (!texto) return;
 
 
-
     const partes =
         texto.split(" ");
-
 
 
     const tipo =
         partes[0].toLowerCase();
 
 
-
     const valor =
         parseFloat(
             partes[1]
-                .replace(",", ".")
+                ?.replace(",", ".")
         );
-
 
 
     const categoria =
         partes[2];
 
 
-
-    /*
-    =========================
-
-    DETECTAR DATA
-
-    Exemplo:
-
-    25/08/2026
-
-    ou
-
-    25/08/2026 14:30
-
-    =========================
-    */
-
     const dataRegex =
         /^\d{2}\/\d{2}\/\d{4}(\s\d{2}:\d{2})?$/;
 
 
-
     let dataLancamento =
         null;
-
 
 
     for (
@@ -806,12 +895,10 @@ async function adicionar() {
         i--
     ) {
 
-
         const possivelData =
             partes
                 .slice(i)
                 .join(" ");
-
 
 
         if (
@@ -820,16 +907,11 @@ async function adicionar() {
             )
         ) {
 
-
             dataLancamento =
                 possivelData;
 
 
-
-            partes.splice(
-                i
-            );
-
+            partes.splice(i);
 
             break;
 
@@ -838,38 +920,11 @@ async function adicionar() {
     }
 
 
-
     const descricao =
         partes
             .slice(3)
             .join(" ");
 
-
-
-    console.log({
-
-        tipo,
-
-        valor,
-
-        categoria,
-
-        descricao,
-
-        data:
-            dataLancamento
-
-    });
-
-
-
-    /*
-    =========================
-
-    VALIDAR TIPO E VALOR
-
-    =========================
-    */
 
     if (
 
@@ -884,25 +939,25 @@ async function adicionar() {
 
     ) {
 
-
         alert(
-            "Comando inválido"
+            "Comando inválido."
         );
-
 
         return;
 
     }
 
 
+    if (!categoria) {
 
-    /*
-    =========================
+        alert(
+            "Informe uma categoria."
+        );
 
-    VALIDAR CATEGORIA
+        return;
 
-    =========================
-    */
+    }
+
 
     if (
         !categoriaExiste(
@@ -911,57 +966,32 @@ async function adicionar() {
         )
     ) {
 
-
         alert(
-
             `Categoria "${categoria}" não encontrada para ${tipo}.`
-
         );
-
 
         return;
 
     }
 
 
-
-    /*
-    =========================
-
-    EDITANDO
-
-    =========================
-    */
+    /* EDITANDO */
 
     if (editandoId) {
 
-
         await atualizarLancamento(
-
             editandoId,
-
             {
-
                 tipo,
-
                 valor,
-
                 categoria,
-
                 descricao,
-
-                data:
-                    dataLancamento
-
+                data: dataLancamento
             }
-
         );
 
 
-
-        editandoId =
-            null;
-
+        editandoId = null;
 
 
         document
@@ -969,53 +999,36 @@ async function adicionar() {
                 "btnAdicionar"
             )
             .textContent =
-            "Adicionar";
-
+                "Adicionar";
 
 
         document
             .getElementById(
                 "btnCancelar"
             )
-            .classList
-            .add(
+            .classList.add(
                 "hidden"
             );
-
-
-    } else {
-
-
-        /*
-        =========================
-
-        NOVO LANÇAMENTO
-
-        =========================
-        */
-
-        await salvarLancamento(
-
-            tipo,
-
-            valor,
-
-            categoria,
-
-            descricao,
-
-            dataLancamento
-
-        );
-
 
     }
 
 
+    /* NOVO LANÇAMENTO */
 
-    input.value =
-        "";
+    else {
 
+        await salvarLancamento(
+            tipo,
+            valor,
+            categoria,
+            descricao,
+            dataLancamento
+        );
+
+    }
+
+
+    input.value = "";
 
 
     await atualizarTela();
@@ -1023,13 +1036,11 @@ async function adicionar() {
 }
 
 
-
-/* =========================
+/* ================================
    REMOVER
-========================= */
+================================ */
 
 async function remover(id) {
-
 
     const confirmar =
         confirm(
@@ -1037,15 +1048,10 @@ async function remover(id) {
         );
 
 
-
     if (!confirmar) return;
 
 
-
-    await excluirLancamento(
-        id
-    );
-
+    await excluirLancamento(id);
 
 
     await atualizarTela();
@@ -1053,13 +1059,11 @@ async function remover(id) {
 }
 
 
-
-/* =========================
+/* ================================
    EDITAR
-========================= */
+================================ */
 
 function editar(id) {
-
 
     const lancamento =
         data.find(
@@ -1068,9 +1072,7 @@ function editar(id) {
         );
 
 
-
     if (!lancamento) return;
-
 
 
     const input =
@@ -1079,57 +1081,38 @@ function editar(id) {
         );
 
 
-
     const dataObj =
-        lancamento.data ||
-        lancamento.createdAt;
-
+        obterData(
+            lancamento
+        );
 
 
     let dataFormatada =
         "";
 
 
-
-    if (
-
-        dataObj &&
-
-        typeof dataObj.toDate === "function"
-
-    ) {
-
-
-        const d =
-            dataObj.toDate();
-
-
+    if (dataObj) {
 
         const dia =
             String(
-                d.getDate()
-            )
-            .padStart(
+                dataObj.getDate()
+            ).padStart(
                 2,
                 "0"
             );
-
 
 
         const mes =
             String(
-                d.getMonth() + 1
-            )
-            .padStart(
+                dataObj.getMonth() + 1
+            ).padStart(
                 2,
                 "0"
             );
 
 
-
         const ano =
-            d.getFullYear();
-
+            dataObj.getFullYear();
 
 
         dataFormatada =
@@ -1138,10 +1121,11 @@ function editar(id) {
     }
 
 
-
     input.value =
-        `${lancamento.tipo} ${lancamento.valor} ${lancamento.categoria} ${lancamento.descricao || ""}`
-        +
+        `${lancamento.tipo} ` +
+        `${lancamento.valor} ` +
+        `${lancamento.categoria} ` +
+        `${lancamento.descricao || ""}` +
         (
             dataFormatada
                 ? ` ${dataFormatada}`
@@ -1149,10 +1133,8 @@ function editar(id) {
         );
 
 
-
     editandoId =
         id;
-
 
 
     document
@@ -1160,19 +1142,16 @@ function editar(id) {
             "btnAdicionar"
         )
         .textContent =
-        "Salvar alterações";
-
+            "Salvar";
 
 
     document
         .getElementById(
             "btnCancelar"
         )
-        .classList
-        .remove(
+        .classList.remove(
             "hidden"
         );
-
 
 
     input.focus();
@@ -1180,28 +1159,35 @@ function editar(id) {
 }
 
 
-
-/* =========================
+/* ================================
    EVENTOS
-========================= */
+================================ */
 
-
-document
-    .getElementById(
+const btnAdicionar =
+    document.getElementById(
         "btnAdicionar"
-    )
-    .addEventListener(
+    );
+
+
+if (btnAdicionar) {
+
+    btnAdicionar.addEventListener(
         "click",
         adicionar
     );
 
+}
 
 
-document
-    .getElementById(
+const command =
+    document.getElementById(
         "command"
-    )
-    .addEventListener(
+    );
+
+
+if (command) {
+
+    command.addEventListener(
         "keypress",
         (e) => {
 
@@ -1216,13 +1202,42 @@ document
         }
     );
 
+}
 
 
-document
-    .getElementById(
+/* SELETOR DE PERÍODO */
+
+const periodo =
+    document.getElementById(
+        "periodo"
+    );
+
+
+if (periodo) {
+
+    periodo.addEventListener(
+        "change",
+        () => {
+
+            atualizarDashboard();
+
+        }
+    );
+
+}
+
+
+/* TEMA */
+
+const themeBtn =
+    document.getElementById(
         "themeBtn"
-    )
-    .addEventListener(
+    );
+
+
+if (themeBtn) {
+
+    themeBtn.addEventListener(
         "click",
         () => {
 
@@ -1236,11 +1251,12 @@ document
         }
     );
 
+}
 
 
-/* =========================
+/* ================================
    INICIAR APP
-========================= */
+================================ */
 
 (async () => {
 
@@ -1249,10 +1265,9 @@ document
 })();
 
 
-
-/* =========================
+/* ================================
    FUNÇÕES GLOBAIS
-========================= */
+================================ */
 
 window.adicionar =
     adicionar;
